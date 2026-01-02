@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOVERHEDGY | OVERLOAD</title>
+    <!-- Cinematic Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Teko:wght@300;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- AUDIO -->
+    <audio id="bgm-hum" loop>
+        <source src="https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sfx-charge" loop>
+        <source src="https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- OVERLAYS -->
+    <div class="scanlines"></div>
+
+    <!-- STAGE 1: INTRO -->
+    <section class="stage" id="stage-intro">
+        <div class="intro-box">
+            <h1 class="flicker glitch" data-text="HOVERHEDGY">HOVERHEDGY</h1>
+            <p>TOUCH TO INITIALIZE</p>
+        </div>
+    </section>
+
+    <!-- STAGE 2: THE PRISON (Interactive) -->
+    <section class="stage" id="stage-prison">
+        <div class="bg-grid"></div>
+
+        <!-- Top HUD -->
+        <div class="hud-top">
+            <div class="hud-row">
+                <span>SUBJECT: <b class="cyan">X-77</b></span>
+                <span>STATUS: <b class="red blink">CONTAINED</b></span>
+            </div>
+            <div class="hud-line"></div>
+        </div>
+
+        <!-- The Machine -->
+        <div class="reactor-unit">
+            <!-- Piston/Clamps -->
+            <div class="clamp top-clamp"></div>
+            <div class="clamp bottom-clamp"></div>
+
+            <!-- Core -->
+            <div class="core-cell" id="core-btn">
+                <div class="energy-ring"></div>
+                <div class="hedgy-wrapper">
+                    <img src="assets/hero.png" alt="Specimen" id="hedgy-img">
+                </div>
+            </div>
+
+            <!-- Cables -->
+            <div class="cable cable-left"></div>
+            <div class="cable cable-right"></div>
+        </div>
+
+        <!-- Canvas for Sparks & Implosion -->
+        <canvas id="fx-canvas"></canvas>
+
+        <!-- Bottom HUD -->
+        <div class="hud-bottom">
+            <div class="progress-frame">
+                <div class="progress-bar" id="fill-bar"></div>
+            </div>
+            <p class="guide-text" id="guide-text">HOLD TO OVERLOAD</p>
+        </div>
+    </section>
+
+    <!-- STAGE 3: LANDING (Full Screen Fix) -->
+    <section class="stage" id="stage-landing">
+        <div class="landing-bg"></div>
+
+        <div class="landing-container">
+            <div class="title-group">
+                <h3>PROJECT SUCCESS</h3>
+                <h1>HOVERHEDGY</h1>
+            </div>
+
+            <div class="hero-action">
+                <div class="pulse-ring"></div>
+                <a href="#" class="buy-button">BUY NOW</a>
+            </div>
+
+            <div class="info-group">
+                <div class="info-item">
+                    <small>TOTAL SUPPLY</small>
+                    <span>99,172,200,000</span>
+                </div>
+                <div class="info-item">
+                    <small>CONTRACT</small>
+                    <span class="dim">PENDING...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="flash-white"></div>
+    <script src="script.js"></script>
+</body>
+
+</html>
