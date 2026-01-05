@@ -572,12 +572,12 @@ function enterMarket() {
     let isGalleryLocked = true; // Default Locked State
 
     // Images Array (Updated to User Assets)
-    const images = [
-        'assets/image/gallery_hedgy_01.png',
-        'assets/image/gallery_hedgy_02.png',
-        'assets/image/gallery_hedgy_03.jpeg',
-        'assets/image/gallery_hedgy_04.gif',
-        'assets/image/gallery_hedgy_05.gif'
+        const images = [
+        'assets/image/gallery_hedgy_01.gif',
+        'assets/image/gallery_hedgy_02.gif',
+        'assets/image/gallery_hedgy_03.png',
+        'assets/image/gallery_hedgy_04.png',
+        'assets/image/gallery_hedgy_05.jpeg'
     ];
     let imgIndex = 0;
 

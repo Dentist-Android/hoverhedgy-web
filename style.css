@@ -825,13 +825,7 @@ body.market-mode #crt-effect {
     visibility: hidden !important;
 }
 
-/* UPDATE STATS FONT SIZE (User Request: Smaller) */
-.stat-value {
-    font-size: 0.6rem !important;
-    /* Micro Text */
-    font-weight: 300 !important;
-    letter-spacing: 0.5px !important;
-}
+
 
 
 
@@ -2168,7 +2162,7 @@ button.buy-btn-large {
 /* USER REQUEST: Copy Button Neon Cyan */
 .copy-btn {
     cursor: pointer;
-    margin-left: 8px;
+    margin-left: 0px;
     color: #00F3FF !important;
     /* Cyan */
     font-weight: bold;
@@ -2529,9 +2523,9 @@ button.buy-btn-large:hover {
     font-weight: 400 !important;
     /* Standard Weight */
     color: #eee !important;
-    font-size: 0.7rem !important;
+    font-size: 0.6rem !important;
     /* Consistent Size */
-    letter-spacing: 0.5px;
+    letter-spacing: 0px;
 
     display: flex;
     align-items: baseline;
@@ -2539,7 +2533,7 @@ button.buy-btn-large:hover {
     justify-content: center;
 
     /* "날씬하게" (Slim Look) */
-    transform: scaleX(0.9);
+    transform: scaleX(0.85);
     transform-origin: center bottom;
     white-space: nowrap;
 }
@@ -2556,7 +2550,7 @@ button.buy-btn-large:hover {
     color: #00F3FF !important;
     font-weight: 900;
     font-size: 0.6rem;
-    padding-left: 5px;
+    padding-left: 2px;
     position: relative;
     top: -1px;
     /* Micro adjustment if needed */
