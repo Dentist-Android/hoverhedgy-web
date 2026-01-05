@@ -1,0 +1,2697 @@
+@charset "UTF-8";
+
+/* =========================================
+   HOVERHEDGY - MOBILE FIRST STYLES
+   [Step 1] Boot & CCTV Transition
+   ========================================= */
+
+:root {
+    --bg-color: #000;
+    --neon-cyan: #00F3FF;
+    --neon-green: #39FF14;
+    --terminal-font: 'VT323', monospace;
+    --title-font: 'Orbitron', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: #fff;
+    font-family: var(--title-font);
+    height: 100vh;
+    overflow: hidden;
+    /* No scroll on mobile */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* === CRT FILTER (Scanlines) === */
+.crt-lines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+        radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+    background-size: 100% 4px, 100% 100%;
+    z-index: 999;
+    pointer-events: none;
+    animation: scan-scroll 10s linear infinite;
+
+    /* POLISH: Reduced opacity significantly (0.7 -> 0.3) for cleaner character */
+    opacity: 0.3;
+    /* mix-blend-mode REMOVED to reduce washout/blur effect */
+}
+
+to {
+    background-position: 0 100%;
+}
+
+/* Main Viewport (Lifted above Global Bloom) */
+.lab-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    /* FORCE CONTENT ABOVE BLOOM */
+}
+
+
+
+/* === PAGE 1: BOOT SCREEN === */
+/* === PAGE 1: BOOT SCREEN (Premium Layout) === */
+#page-boot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    /* Vertical Spread */
+    align-items: center;
+    background: #000;
+    z-index: 100;
+    cursor: pointer;
+    padding: 40px 20px 80px 20px;
+    /* Safe Area Padding */
+}
+
+#page-boot.active-section {
+    display: flex;
+}
+
+/* 1. Top Corners (BIOS Style) */
+.bios-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--terminal-font);
+    font-size: 0.9rem;
+    color: #444;
+    /* Subtle */
+    letter-spacing: 1px;
+}
+
+/* 2. Center Content (Optical Center) */
+.terminal-content {
+    /* Absolute Center Logic */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* Shrink to fit content (Logo Width) */
+    width: fit-content;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Align children to left edge */
+}
+
+.boot-title {
+    position: relative;
+    /* Adjusted for reliable margins */
+    font-size: clamp(2.5rem, 10.5vw, 5rem);
+    color: #fff;
+    margin: 0 0 40px 0;
+    /* Bottom margin for spacing */
+    letter-spacing: -3px;
+
+    /* Perfect Center Logic v2 */
+    width: fit-content;
+    padding: 0 5px;
+    /* Minimal padding */
+
+    text-align: center;
+    white-space: nowrap;
+    font-weight: 900;
+
+    /* Neon Bloom Effect */
+    text-shadow:
+        2px 0 var(--neon-cyan),
+        -2px 0 rgba(255, 0, 0, 0.8),
+        0 0 20px rgba(0, 243, 255, 0.6),
+        0 0 40px rgba(0, 243, 255, 0.3);
+
+    overflow: visible;
+    animation: power-on 2s ease-out forwards, neon-breath 3s ease-in-out infinite 2.5s;
+    opacity: 0;
+}
+
+@keyframes neon-breath {
+
+    0%,
+    100% {
+        text-shadow:
+            2px 0 var(--neon-cyan),
+            -2px 0 red,
+            0 0 20px rgba(0, 243, 255, 0.6),
+            0 0 40px rgba(0, 243, 255, 0.3);
+    }
+
+    50% {
+        text-shadow:
+            2px 0 var(--neon-cyan),
+            -2px 0 red,
+            0 0 10px rgba(0, 243, 255, 0.4),
+            0 0 20px rgba(0, 243, 255, 0.1);
+    }
+}
+
+/* Power On Animation ("The Big Bang") */
+@keyframes power-on {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+        filter: brightness(0);
+    }
+
+    40% {
+        opacity: 0;
+        transform: scale(0.95);
+        filter: brightness(0);
+    }
+
+    /* Delay */
+    41% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: brightness(2);
+    }
+
+    /* Flash */
+    45% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    55% {
+        opacity: 0.5;
+    }
+
+    /* Flicker */
+    60% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+/* Advanced CSS Glitch Animation */
+.boot-title::before,
+.boot-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+}
+
+.boot-title::before {
+    left: 2px;
+    text-shadow: -1px 0 red;
+    animation: glitch-1 2s infinite linear alternate-reverse;
+}
+
+.boot-title::after {
+    left: -2px;
+    text-shadow: -1px 0 var(--neon-cyan);
+    animation: glitch-2 3s infinite linear alternate-reverse;
+}
+
+.boot-status {
+    position: relative;
+    /* Relative to terminal-content flow */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    /* Tight line spacing */
+    font-family: var(--terminal-font);
+    font-size: 0.8rem;
+    color: #444;
+    letter-spacing: 1px;
+    text-align: left;
+    opacity: 0.6;
+    z-index: 110;
+    padding-left: 2px;
+    /* Micro adjustment to match text start */
+}
+
+.boot-status .ok {
+    color: var(--neon-green);
+}
+
+/* 3. Bottom Action area */
+.touch-hint-zone {
+    width: 100%;
+    text-align: center;
+}
+
+.touch-hint {
+    font-family: var(--terminal-font);
+    font-size: 1.1rem;
+    color: var(--neon-cyan);
+    letter-spacing: 4px;
+    /* Wide spacing for elegance */
+    opacity: 0.8;
+    animation: blink 0.8s infinite;
+    border-bottom: 1px solid transparent;
+}
+
+@keyframes glitch-1 {
+    0% {
+        clip-path: inset(20% 0 80% 0);
+    }
+
+    20% {
+        clip-path: inset(60% 0 10% 0);
+    }
+
+    40% {
+        clip-path: inset(40% 0 50% 0);
+    }
+
+    60% {
+        clip-path: inset(80% 0 5% 0);
+    }
+
+    80% {
+        clip-path: inset(10% 0 70% 0);
+    }
+
+    100% {
+        clip-path: inset(30% 0 50% 0);
+    }
+}
+
+@keyframes glitch-2 {
+    0% {
+        clip-path: inset(10% 0 60% 0);
+    }
+
+    20% {
+        clip-path: inset(80% 0 5% 0);
+    }
+
+    40% {
+        clip-path: inset(30% 0 20% 0);
+    }
+
+    60% {
+        clip-path: inset(10% 0 80% 0);
+    }
+
+    80% {
+        clip-path: inset(40% 0 10% 0);
+    }
+
+    100% {
+        clip-path: inset(50% 0 30% 0);
+    }
+}
+
+/* === PAGE 2: THE LAB (Physics) === */
+#page-lab {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #050505;
+    overflow: hidden;
+    /* Prevent bloom overflow */
+    background-image:
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    display: none;
+    z-index: 50;
+    opacity: 0;
+    filter: blur(10px) grayscale(100%);
+    transform: scale(1.2);
+    transition: all 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow: hidden;
+}
+
+#page-lab.active-section {
+    display: block;
+}
+
+#page-lab.cctv-focus-in {
+    opacity: 1 !important;
+    filter: blur(0) grayscale(0) !important;
+    transform: scale(1) !important;
+}
+
+/* CAM UI */
+.cam-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    padding: 20px;
+}
+
+/* HEADER UI (INSIDE BRACKETS) */
+/* HEADER UI (INSIDE BRACKETS) */
+/* HEADER UI (INSIDE BRACKETS) */
+.header-ui {
+    position: absolute;
+    top: 20px;
+    /* Higher up inside brackets */
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    align-items: center;
+    /* Force Center Alignment of Children */
+}
+
+
+
+.rec-status {
+    position: relative;
+    font-family: var(--terminal-font);
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* KEEP REC LEFT ALIGNED */
+    padding-left: 7px;
+    gap: 8px;
+    width: 100%;
+    margin-top: -13px;
+}
+
+.lab-title {
+    position: relative;
+    font-family: var(--title-font);
+    color: #fff;
+    font-size: 1.7rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.1) 20%, rgba(0, 243, 255, 0.1) 80%, transparent 100%);
+    width: 100%;
+    text-align: center !important;
+    /* FORCE CENTER */
+    padding: 5px 0;
+    margin-top: 10px;
+    border: none;
+    left: 0 !important;
+    /* RESET LEFT OFFSET */
+    transform: none !important;
+}
+
+.rec-status .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: red;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+}
+
+.timestamp {
+    color: #666;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* Camera Viewfinder Frame (Classic) */
+.focus-brackets {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 95%;
+    /* Widened Frame */
+    height: 90%;
+    /* Heightened Frame */
+    /* Frame the subject */
+    transform: translate(-50%, -50%) scale(1.1);
+    /* Start slightly zoomed out */
+    pointer-events: none;
+    z-index: 90;
+
+    /* 4-Corner 'L' shapes using linear-gradients */
+    background:
+        linear-gradient(to right, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 0 0,
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 0 0,
+
+        linear-gradient(to left, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 100% 0,
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 100% 0,
+
+        linear-gradient(to right, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 0 100%,
+        linear-gradient(to top, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 0 100%,
+
+        linear-gradient(to left, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 100% 100%,
+        linear-gradient(to top, rgba(255, 255, 255, 0.8) 2px, transparent 2px) 100% 100%;
+
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    /* Corner line length */
+
+    opacity: 0;
+    transition: all 1.2s ease-out 0.5s;
+}
+
+/* Center Crosshair (+) */
+.focus-brackets::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+}
+
+.focus-brackets::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+}
+
+#page-lab.cctv-focus-in .focus-brackets {
+    transform: translate(-50%, -50%) scale(1);
+    /* Settle in */
+    opacity: 0.8;
+}
+
+/* MAIN VIEWPORT (Physics Stage) */
+.lab-viewport {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 75%;
+    /* Lower 3/4 of screen */
+    display: flex;
+    justify-content: center;
+}
+
+/* 1. Magnet Base */
+/* Image Protection */
+.lab-viewport img {
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+/* 1. Magnet Base */
+/* 1. Magnet Base (Raised Up) */
+.magnet-group {
+    position: absolute;
+    bottom: 20%;
+    /* Restore Height */
+    width: 80%;
+    max-width: 260px;
+    height: auto;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+}
+
+.magnet-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    /* Soft edge masking to prevent box-cuts */
+    -webkit-mask-image: radial-gradient(ellipse, black 40%, transparent 75%);
+    mask-image: radial-gradient(ellipse, black 40%, transparent 75%);
+    filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3));
+}
+
+.magnet-shadow {
+    position: absolute;
+    top: 35%;
+    /* Adjusted up slightly for better contact */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 55%;
+    /* Narrower for contact */
+    height: 20px;
+    /* Flatter for contact */
+    background: radial-gradient(ellipse, #000 40%, transparent 70%);
+    /* PITCH BLACK CORE */
+    opacity: 1.0;
+    z-index: 15;
+    /* transition removed for physics sync */
+}
+
+.magnet-glow {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 60%;
+    height: 40px;
+    border-radius: 50%;
+    /* background: var(--neon-cyan); REMOVED per user request (Dark aura trace) */
+    background: transparent;
+    display: none;
+    /* Force hide */
+    filter: blur(30px);
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.specimen-group {
+    position: absolute;
+    bottom: 23%;
+    /* Raised from 20% to 23% - Perspective Fix */
+    left: 50%;
+    /* Horizontal centering is now handled in JS to avoid transform conflicts */
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform-style: preserve-3d;
+    transform-origin: 50% 90%;
+    /* Pivot at Feet (Bottom Fixed, Top Swings) */
+    cursor: pointer;
+    z-index: 50;
+    pointer-events: none;
+    /* Only children should be clickable */
+}
+
+.hedgy-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 20;
+    transition: all 0.1s;
+}
+
+/* Interaction: Condensed Light (White Hot) */
+.specimen-group.condensed .hedgy-img {
+    filter: brightness(3) drop-shadow(0 0 20px #fff);
+    /* Pure Energy */
+    transform: scale(0.95);
+}
+
+/* Physics: Wobble (LK-99 Effect) */
+@keyframes lk99-wobble {
+    0% {
+        transform: translate(-50%, -100px) rotate(-5deg);
+    }
+
+    25% {
+        transform: translate(-50%, -95px) rotate(5deg);
+    }
+
+    50% {
+        transform: translate(-50%, -105px) rotate(-3deg);
+    }
+
+    75% {
+        transform: translate(-50%, -98px) rotate(3deg);
+    }
+
+    100% {
+        transform: translate(-50%, -100px) rotate(-5deg);
+    }
+}
+
+/* Levitating State */
+.specimen-group.levitating {
+    animation: lk99-wobble 2s ease-in-out infinite;
+}
+
+/* Quantum Aurora Field (Pure CSS - Sharp & Vibrant) */
+/* Quantum Aurora Field (Refined & Smaller) */
+/* Electric Spark (Blue & Vivid) */
+/* Electric Spark (Cyan/Blue - Reference Match) */
+/* Electric Spark (Compact & Controlled) */
+/* Electric Spark (Safe Pure Blue) */
+/* Electric Spark (Original Colors) */
+.spark-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: url('assets/hedgy_promo_02.jpg') no-repeat center center;
+    background-size: contain;
+
+    /* ORIGINAL COLORS: Stronger Contrast */
+    filter: contrast(1.3) brightness(1.3);
+
+    /* MASK */
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 70%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 70%);
+
+    mix-blend-mode: screen;
+    z-index: 1;
+
+    opacity: 0;
+    /* Default invisible, controlled by animation */
+    pointer-events: none;
+    transform-origin: center center;
+}
+
+/* === AUTO-FOCUS EFFECT === */
+.autofocus-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 60;
+    /* Above character */
+}
+
+.focus-rect {
+    position: absolute;
+    border: 1px solid rgba(0, 243, 255, 0.8);
+    box-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.1);
+    /* Default Centered */
+}
+
+.focus-rect.active {
+    animation: focus-snap 0.6s cubic-bezier(0, 0.9, 0.4, 1) forwards;
+}
+
+@keyframes focus-snap {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.3);
+        border-width: 1px;
+    }
+
+    10% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.0);
+        /* Snap to target */
+        border-width: 2px;
+        border-color: #fff;
+    }
+
+    30% {
+        border-width: 1px;
+        border-color: rgba(0, 243, 255, 0.8);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+}
+
+/* Yellow Success Text */
+.status-val.success-yellow {
+    color: #FFD700 !important;
+    /* Gold/Yellow */
+    text-shadow: 0 0 10px #FFD700, 0 0 20px rgba(255, 215, 0, 0.5) !important;
+    animation: pulse-yellow 1s infinite alternate;
+}
+
+@keyframes pulse-yellow {
+    from {
+        text-shadow: 0 0 10px #FFD700;
+    }
+
+    to {
+        text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700;
+    }
+}
+
+/* === INTERACTION EFFECTS === */
+
+/* 1. Shockwave Ring (Expanding Nova) */
+.shockwave-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow:
+        0 0 30px #00F3FF,
+        inset 0 0 30px #00F3FF;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 80;
+    /* On top of character */
+    mix-blend-mode: screen;
+}
+
+.shockwave-ring.active {
+    animation: shockwave-expand 0.5s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes shockwave-expand {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+        border-width: 10px;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(2.0);
+        opacity: 0;
+        border-width: 0px;
+    }
+}
+
+/* === ISOLATION PROTOCOL: FORCE CLEAN MARKET === */
+body.market-mode .crt-lines,
+body.market-mode .cam-overlay,
+body.market-mode .focus-brackets,
+body.market-mode .vignette,
+body.market-mode .scanlines,
+body.market-mode #crt-effect {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* UPDATE STATS FONT SIZE (User Request: Smaller) */
+.stat-value {
+    font-size: 0.6rem !important;
+    /* Micro Text */
+    font-weight: 300 !important;
+    letter-spacing: 0.5px !important;
+}
+
+
+
+/* 2. Character Flash (White Hot - TONED DOWN) */
+.hedgy-img.flash {
+    filter: brightness(2) contrast(1.2) !important;
+    /* Reduced from 10 */
+    /* Pure White Light */
+    transition: none !important;
+    /* Instant */
+}
+
+/* Layer 3: The "Ghost A" (FAST ON, SLOW FADE) */
+.spark-layer.layer-3 {
+    background-image: url('assets/spark/layer_03.png');
+    animation: spark-ghost 2.5s infinite ease-out;
+    /* Flash... fade... */
+    opacity: 0;
+}
+
+/* Layer 4: The "Ghost B" (FAST ON, SLOW FADE - OFFBEAT) */
+.spark-layer.layer-4 {
+    background-image: url('assets/spark/layer_04.png');
+    animation: spark-ghost 2.5s infinite ease-out 1.25s;
+    /* Offset */
+    opacity: 0;
+}
+
+/* Layer 5: The "Flicker" (GLITCH) */
+.spark-layer.layer-5 {
+    background-image: url('assets/spark/layer_05.png');
+    animation: spark-glitch-1 2.9s infinite linear 0.5s;
+}
+
+/* Layer 6: The "Random Zap" (GLITCH) */
+.spark-layer.layer-6 {
+    background-image: url('assets/spark/layer_06.png');
+    animation: spark-glitch-2 6.7s infinite linear 3.0s;
+}
+
+/* --- KEYFRAMES --- */
+
+/* Ghost Effect: Instant On, Slow Fade Out */
+@keyframes spark-ghost {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    5% {
+        opacity: 1;
+        transform: scale(1.15) rotate(5deg);
+        filter: brightness(2.5);
+    }
+
+    /* SNAP ON */
+    60% {
+        opacity: 0;
+        transform: scale(1.0) rotate(8deg);
+    }
+
+    /* SLOW FADE TRAIL */
+    100% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+@keyframes spark-period-blink {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: brightness(1.8);
+    }
+}
+
+@keyframes spark-glitch-1 {
+
+    0%,
+    4%,
+    20%,
+    23%,
+    60%,
+    63%,
+    100% {
+        opacity: 0;
+        transform: scale(0.9) rotate(0deg);
+    }
+
+    2% {
+        opacity: 1;
+        transform: scale(1.1) rotate(5deg);
+        filter: brightness(2);
+    }
+
+    21.5% {
+        opacity: 0.8;
+        transform: scale(1.0) rotate(-3deg);
+        filter: brightness(1.5);
+    }
+
+    61.5% {
+        opacity: 1;
+        transform: scale(1.15) rotate(2deg);
+        filter: brightness(2.5);
+    }
+}
+
+@keyframes spark-glitch-2 {
+
+    0%,
+    15%,
+    19%,
+    100% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    17% {
+        opacity: 1;
+        transform: scale(1.3) rotate(10deg);
+        filter: brightness(3);
+    }
+
+    /* BIG BOOM */
+}
+
+@keyframes spark-glitch-3 {
+
+    0%,
+    9%,
+    13%,
+    30%,
+    34%,
+    100% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    11% {
+        opacity: 1;
+        transform: scale(1.05) rotate(-5deg);
+        filter: brightness(2);
+    }
+
+    32% {
+        opacity: 0.7;
+        transform: scale(0.95) rotate(3deg);
+        filter: brightness(1.2);
+    }
+}
+
+
+/* Interaction: Aurora Surge (Blue Energy Wave) */
+.aurora-surge {
+    animation: aurora-flash 0.5s ease-out forwards;
+}
+
+@keyframes aurora-flash {
+    0% {
+        filter: drop-shadow(0 0 0px var(--neon-cyan)) brightness(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 30px var(--neon-cyan)) brightness(1.3) hue-rotate(10deg);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 0px var(--neon-cyan)) brightness(1);
+    }
+}
+
+
+
+
+/* Header Overlap Fix */
+.rec-status {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: var(--terminal-font);
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    z-index: 101;
+}
+
+.lab-title {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    /* Anchored Right */
+    font-family: var(--title-font);
+    color: #fff;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 5px var(--neon-cyan);
+    z-index: 101;
+    text-align: right;
+    white-space: nowrap;
+    /* PREVENT LINE BREAK */
+}
+
+/* Consolidated into upper definition */
+
+.mascot-frame {
+    position: relative;
+    width: 200px;
+    /* Reduced from 250px (20% reduction) */
+    height: 226px;
+    /* Reduced from 282px (20% reduction) */
+    margin-bottom: 20px;
+    z-index: 20;
+    transform: translateZ(20px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+}
+
+
+/* 3. Quantum Storm (Spark System) - RIGIDLY BEHIND */
+.spark-system {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    /* Reduced size by 6% per request (Scale 0.94) */
+    /* Fixed Centering: translate3d(-50%, 50%, ...) is required because of bottom: 50% */
+    /* Increased Scale: 0.65 -> 0.8 (+20%) */
+    transform: translate3d(-50%, 50%, -50px) scale(0.96);
+    width: 231px;
+    height: 231px;
+    z-index: -2;
+    /* Bottom Layer: Behind Aura */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Aura Flash for Interaction Feedback */
+.aura-flash {
+    animation: aura-strike 0.1s ease-out;
+}
+
+@keyframes aura-strike {
+    0% {
+        filter: drop-shadow(0 0 50px #fff) brightness(3);
+    }
+
+    100% {
+        filter: drop-shadow(0 0 25px rgba(0, 243, 255, 0.8)) brightness(1);
+    }
+}
+
+.global-bloom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0, 243, 255, 0.2) 0%, transparent 80%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    /* Pushed to BACKGROUND to fix blur */
+    /* In front of BG but behind content? No, let's make it an overlay. */
+    mix-blend-mode: screen;
+    transition: opacity 0.1s ease;
+}
+
+/* Legacy .mascot-bloom block removed to prevent conflicts */
+
+/* Face Spark Overlay (Top Layer over Mascot) */
+.face-spark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 50px);
+    /* FORCE FRONT via 3D transform */
+    width: 75%;
+    /* Increased again */
+    height: 75%;
+    background: url('assets/spark/face-spark.png') no-repeat center center;
+    background-size: contain;
+    mix-blend-mode: screen;
+    /* Lighten effect */
+    z-index: 100;
+    /* Max Z-Index just in case */
+    opacity: 0.8;
+    pointer-events: none;
+    animation: face-spark-random 4s infinite linear;
+    /* Irregular loop to simulate randomness */
+
+    /* Soften edges to remove square box artifacts */
+    -webkit-mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 70%);
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 30%, rgba(0, 0, 0, 0) 70%);
+}
+
+@keyframes face-spark-random {
+
+    /* Baseline: Invisible */
+    0%,
+    3%,
+    18%,
+    22%,
+    45%,
+    48%,
+    65%,
+    68%,
+    88%,
+    91%,
+    100% {
+        opacity: 0;
+        transform: translate3d(-50%, -50%, 50px) scale(0.9);
+        filter: brightness(1);
+    }
+
+    /* SPARK 1: Quick Flash */
+    1.5% {
+        opacity: 1;
+        transform: translate3d(-50%, -50%, 50px) scale(1.1);
+        filter: brightness(2.5) drop-shadow(0 0 20px #fff);
+    }
+
+    /* SPARK 2: Double Tap (Hit 1) */
+    19% {
+        opacity: 0.8;
+        transform: translate3d(-50%, -50%, 50px) scale(1.0);
+        filter: brightness(2.0);
+    }
+
+    /* SPARK 3: Big Burst */
+    46.5% {
+        opacity: 1;
+        transform: translate3d(-50%, -50%, 50px) scale(1.15);
+        filter: brightness(3.0) drop-shadow(0 0 30px #fff);
+    }
+
+    /* SPARK 4: Weak Flicker */
+    66.5% {
+        opacity: 0.6;
+        transform: translate3d(-50%, -50%, 50px) scale(0.95);
+        filter: brightness(1.5);
+    }
+
+    /* SPARK 5: Final Zap */
+    89.5% {
+        opacity: 1;
+        transform: translate3d(-50%, -50%, 50px) scale(1.05);
+        filter: brightness(2.2);
+    }
+}
+
+/* Visibility based on charge */
+.spark-active .spark-system,
+.spark-pulse .spark-system {
+    opacity: 0.85;
+    /* Increased prominence */
+}
+
+.levitating .spark-system {
+    opacity: 1;
+}
+
+.spark-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* mix-blend-mode: screen; REMOVED for SOLID visibility */
+    opacity: 0;
+    opacity: 0;
+}
+
+.mascot-frame {
+    position: relative;
+    z-index: 10;
+    /* Mascot on TOP */
+}
+
+
+/* .mascot-bloom is defined elsewhere with z-index: -20 */
+
+.layer-2 {
+    background-image: url('assets/spark/layer_02.png');
+    animation: spark-rotate-cw 4s linear infinite;
+}
+
+.layer-3 {
+    background-image: url('assets/spark/layer_03.png');
+    animation: spark-rotate-ccw 6s linear infinite;
+}
+
+.layer-4 {
+    background-image: url('assets/spark/layer_04.png');
+    animation: spark-rotate-cw 8s linear infinite;
+}
+
+.layer-5 {
+    background-image: url('assets/spark/layer_05.png');
+    animation: spark-rotate-ccw 10s linear infinite;
+}
+
+.layer-6 {
+    background-image: url('assets/spark/layer_06.png');
+    animation: spark-rotate-cw 12s linear infinite;
+}
+
+@keyframes spark-strobe {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+}
+
+@keyframes spark-rotate-cw {
+    from {
+        transform: rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.1);
+    }
+
+    to {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+@keyframes spark-rotate-ccw {
+    from {
+        transform: rotate(360deg) scale(1.05);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(0.95);
+    }
+
+    to {
+        transform: rotate(0deg) scale(1.05);
+    }
+}
+
+.shockwave-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 3px solid var(--neon-cyan);
+    opacity: 0;
+}
+
+.shockwave-active .shockwave-ring {
+    animation: ripple-out 0.5s ease-out;
+}
+
+/* HUD BOTTOM */
+.hud-bottom {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+    z-index: 90;
+    padding: 0 20px;
+}
+
+.status-panel {
+    font-family: var(--terminal-font);
+    color: #888;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.status-val {
+    color: var(--neon-cyan);
+}
+
+.energy-bar-frame {
+    width: 100%;
+    height: 12px;
+    border: 1px solid #444;
+    background: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+}
+
+.energy-segments {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 4px;
+    padding: 2px;
+}
+
+.segment {
+    flex: 1;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    transition: all 0.1s;
+}
+
+.segment.active {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+}
+
+.segment.hot {
+    background: #fff;
+    box-shadow: 0 0 15px #fff, 0 0 30px var(--neon-cyan);
+}
+
+/* Chromatic Aberration Glitch */
+.chroma-glitch {
+    animation: chroma-pulse 0.15s ease-out;
+}
+
+@keyframes chroma-pulse {
+    0% {
+        filter: contrast(1);
+    }
+
+    10% {
+        filter: contrast(1.5) drop-shadow(2px 0 red) drop-shadow(-2px 0 blue);
+        transform: scale(1.02);
+    }
+
+    100% {
+        filter: contrast(1);
+        transform: scale(1);
+    }
+}
+
+.guide-text {
+    font-family: var(--terminal-font);
+    color: #555;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* Animations */
+@keyframes float-idle {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Screen Shake Effect */
+@keyframes screen-shake {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(2px, -2px);
+    }
+
+    50% {
+        transform: translate(-2px, 2px);
+    }
+
+    75% {
+        transform: translate(1px, -1px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+body.shake-active {
+    animation: screen-shake 0.1s ease-in-out;
+}
+
+/* Quantum Drift (Slow idle float) */
+@keyframes quantum-drift {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    33% {
+        transform: translateY(-3px) rotate(1deg);
+    }
+
+    66% {
+        transform: translateY(2px) rotate(-1deg);
+    }
+
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.specimen-group.levitating {
+    animation: quantum-drift 3s ease-in-out infinite, lk99-wobble 2s ease-in-out infinite;
+}
+
+@keyframes ripple-out {
+    0% {
+        width: 10px;
+        height: 10px;
+        opacity: 0.8;
+    }
+
+    100% {
+        width: 150px;
+        height: 150px;
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+@keyframes shake-hedgy {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(5deg);
+    }
+
+    75% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Typewriter Styles */
+.type-line {
+    min-height: 1.2rem;
+    text-align: left;
+    width: 100%;
+    margin-bottom: 5px;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* The Blinking Cursor */
+.type-line.typing::after {
+    content: '█';
+    margin-left: 5px;
+    color: var(--neon-cyan);
+    animation: blink 0.5s infinite;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.visible {
+    opacity: 1 !important;
+    transition: opacity 0.5s;
+}
+
+/* === INTERACTION EFFECTS (Added) === */
+.hedgy-img.surge {
+    transform: scale(1.1) translateY(5px);
+    filter: brightness(1.5) drop-shadow(0 0 15px var(--neon-cyan));
+    transition: transform 0.05s, filter 0.05s;
+}
+
+.float-active {
+    animation: float-intense 0.5s ease-in-out infinite !important;
+}
+
+@keyframes float-intense {
+
+    0%,
+    100% {
+        transform: translateY(-30px);
+    }
+
+    50% {
+        transform: translateY(-50px);
+    }
+}
+
+.status-val.success {
+    color: var(--neon-cyan);
+    font-size: 1.4rem;
+    text-shadow: 0 0 10px var(--neon-cyan);
+    animation: pulse-text 0.5s infinite alternate;
+}
+
+@keyframes pulse-text {
+    from {
+        opacity: 0.8;
+    }
+
+    to {
+        opacity: 1;
+        text-shadow: 0 0 20px var(--neon-cyan);
+    }
+}
+
+/* === PAGE 3: MARKET (Glassmorphism) === */
+#page-market {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+    /* Bottom Sheet */
+    justify-content: center;
+    overflow: hidden;
+}
+
+#page-market.active-section {
+    display: flex;
+}
+
+.glass-bg-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 1;
+    opacity: 0;
+    animation: fade-in 1s forwards;
+}
+
+.glass-panel {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 500px;
+    height: 85%;
+    /* Cover most of screen */
+    background: rgba(10, 10, 15, 0.85);
+    border-top: 1px solid rgba(0, 243, 255, 0.3);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 243, 255, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+
+    transform: translateY(100%);
+    animation: slide-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.5s;
+}
+
+/* Content Styles */
+.success-header {
+    font-size: 0.9rem;
+    color: var(--neon-cyan);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.market-title {
+    font-size: 3rem;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.hero-spacer {
+    flex: 1;
+}
+
+/* Pushes content apart */
+
+/* Buy Button */
+.buy-btn {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    background: linear-gradient(90deg, #00F3FF, #0066FF);
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    color: #000;
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+    overflow: hidden;
+    transition: transform 0.1s;
+    margin-bottom: 40px;
+}
+
+.buy-btn:active {
+    transform: scale(0.98);
+}
+
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    transform: skewX(-20deg);
+    animation: shine-sweep 3s infinite;
+}
+
+/* Stats Grid */
+.stats-grid {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-item .label {
+    font-size: 0.7rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat-item .value {
+    font-size: 1.1rem;
+    color: #fff;
+    font-family: var(--terminal-font);
+}
+
+.stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ca-box {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 20px;
+}
+
+.ca-val {
+    font-family: var(--terminal-font);
+    color: #888;
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.market-footer {
+    font-size: 0.7rem;
+    color: #444;
+    margin-top: auto;
+}
+
+/* Animations */
+@keyframes slide-up {
+    to {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shine-sweep {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 200%;
+    }
+
+    100% {
+        left: 200%;
+    }
+}
+
+/* OVERRIDE: Spark Transition Speed (0.3s -> 0.15s) */
+.spark-system,
+.spark-layer {
+    transition: opacity 0.15s ease !important;
+}
+
+
+/* OVERRIDE: Aurora Force Fix (Contour Glow Mode - Structural Fix) */
+.mascot-bloom {
+    /* CHANGED: Soft Diffuse "Mana Ball" (No Hard Edges) */
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+
+    width: 150px !important;
+    /* Reduced 30% (220px -> 150px) */
+    height: 150px !important;
+
+    background: radial-gradient(circle, rgba(0, 191, 255, 0.9) 0%, rgba(0, 191, 255, 0) 70%) !important;
+
+    /* Reduced Blur (30->20) for Denser Core */
+    /* Lowered Brightness (1.3->1.1) for Deeper Blue */
+    filter: blur(20px) contrast(1.2) brightness(1.2) !important;
+
+    box-shadow: none !important;
+    border-radius: 50% !important;
+
+    z-index: -1 !important;
+    /* mix-blend-mode REMOVED to force standard rendering (No washing out) */
+    opacity: 0.85;
+}
+
+/* === PAGE 3: MARKET (FINAL SUCCESS UI) === */
+#page-market {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Darker Lab Background */
+    background: #000 !important;
+    background-image:
+        radial-gradient(circle at center, #111 0%, #000 70%),
+        linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+    background-size: 100% 100%, 40px 40px, 40px 40px;
+    z-index: 200;
+    /* Flex Center */
+    justify-content: center;
+    align-items: center;
+}
+
+#page-market.active-section {
+    display: flex !important;
+}
+
+/* AURORA BACKGROUND EFFECT */
+.market-aurora {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    width: 600px;
+    /* Large Aura */
+    height: 600px;
+    transform: translate(-50%, -50%);
+    background: url('assets/hoverhedgy-c/orora.png') no-repeat center center;
+    background-size: contain;
+    opacity: 0;
+    /* Star hidden */
+    z-index: 10 !important;
+    /* Behind Card (Card is z-index auto? No, separate logic) */
+    pointer-events: none;
+    filter: blur(30px) brightness(1.5) hue-rotate(45deg);
+    /* Golden/Green shift */
+    mix-blend-mode: screen;
+}
+
+/* Activated by JS when card reveals */
+.market-aurora.active {
+    animation: aurora-spin 10s linear infinite, aurora-pulse 4s ease-in-out infinite alternate;
+    opacity: 1.0;
+    /* Full visibility */
+    transition: opacity 1.5s ease;
+}
+
+@keyframes aurora-spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes aurora-pulse {
+    0% {
+        filter: blur(40px) brightness(1.5) hue-rotate(40deg);
+        scale: 1;
+    }
+
+    100% {
+        filter: blur(90px) brightness(2.8) hue-rotate(50deg);
+        /* Intense Glow & Blur */
+        scale: 1.2;
+    }
+}
+
+/* Reward Text Overlay */
+/* Reward Text Overlay (REWARD UNLOCKED) */
+.reward-msg {
+    position: absolute;
+    top: 50%;
+    /* Center Vertical */
+    left: 50%;
+    /* Center Horizontal */
+    transform: translate(-50%, -50%) scale(0.5);
+    /* Start Small */
+    width: 100%;
+    text-align: center;
+
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    /* Black */
+    color: #FFD700;
+    /* Gold */
+    font-size: 2.5rem;
+    /* Big */
+    letter-spacing: 4px;
+
+    text-shadow:
+        0 0 20px rgba(255, 215, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.3);
+
+    pointer-events: none;
+    opacity: 0;
+    z-index: 250;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.reward-msg.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.0);
+    /* Pop in */
+}
+
+/* EXPLOSIVE EXIT */
+.reward-msg.fade-out {
+    opacity: 0 !important;
+    transform: translate(-50%, -50%) scale(3.0);
+    /* BURST */
+    filter: blur(20px);
+    transition: all 0.4s ease-out;
+}
+
+/* IMPACT FLASH OVERLAY */
+.impact-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.1s;
+}
+
+.impact-flash.flash {
+    opacity: 0.8;
+}
+
+/* 1. SUCCESS CARD CONTAINER (QUANTUM IMPACT STYLE) */
+.market-card {
+    width: 90%;
+    max-width: 450px;
+    z-index: 20 !important;
+
+    /* TECH CARD AESTHETIC */
+    background: linear-gradient(135deg, rgba(20, 20, 25, 0.95), rgba(5, 5, 10, 0.98)),
+        repeating-linear-gradient(45deg, transparent 0, transparent 10px, rgba(255, 255, 255, 0.03) 10px, rgba(255, 255, 255, 0.03) 11px) !important;
+    background-blend-mode: overlay;
+
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 24px !important;
+    /* Smoother */
+    padding: 30px 20px !important;
+
+    /* Double Border & Glow */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.8),
+        /* Inner Black Line */
+        0 0 0 4px rgba(30, 30, 40, 0.5),
+        /* Outer Rim */
+        0 0 60px rgba(0, 0, 0, 0.9),
+        /* Deep Shadow */
+        inset 0 0 30px rgba(255, 255, 255, 0.05) !important;
+
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+
+    /* IMPACT ANIMATION INITIAL STATE */
+    transform: scale(3);
+    /* Start Giant */
+    opacity: 0;
+    filter: blur(20px);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    /* Bouncy Slam */
+}
+
+/* Holographic Sheen */
+.market-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 45%,
+            rgba(255, 255, 255, 0.03) 50%,
+            transparent 55%);
+    transform: rotate(30deg);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ... existing styles ... */
+
+/* 3. BUTTON (INITIALIZE BUY) */
+button.buy-btn-large {
+    position: relative;
+    width: 100%;
+    height: 60px;
+
+    /* COLOR FIX FOR MOBILE (Less Red, More Golden-Orange) */
+    background: linear-gradient(180deg, #FFC800 0%, #FF9F00 100%) !important;
+
+    border: none !important;
+    border-radius: 12px !important;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s;
+    box-shadow: 0 0 20px rgba(255, 160, 0, 0.4) !important;
+    /* Modified Shadow too */
+}
+
+/* TRIGGERED BY JS */
+.market-card.reveal {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    filter: blur(0) !important;
+    /* AFTER reveal, add breathing glow */
+    animation: gold-breath 4s ease-in-out infinite forwards;
+    animation-delay: 0.5s;
+}
+
+
+
+@keyframes gold-breath {
+
+    0%,
+    100% {
+        border-color: #554400;
+        box-shadow:
+            0 0 0 1px rgba(255, 215, 0, 0.2),
+            0 0 60px rgba(255, 215, 0, 0.1);
+    }
+
+    50% {
+        border-color: #FFD700;
+        box-shadow:
+            0 0 0 1px rgba(255, 215, 0, 0.5),
+            0 0 100px rgba(255, 215, 0, 0.4),
+            /* Main Gold Glow */
+            0 0 40px rgba(0, 243, 255, 0.2);
+        /* Cyan Core Accent */
+    }
+}
+
+/* 2. HEADER */
+.success-header {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.sub-title {
+    font-family: 'Orbitron', sans-serif;
+    /* TEXT GRADIENT ONLY - NO BOX */
+    background: linear-gradient(180deg, #FFC800 0%, #FF9F00 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #FFC800 !important;
+    /* Fallback */
+
+    font-size: 0.9rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
+
+    /* REMOVED ALL BOX PROPERTIES */
+    padding: 0;
+    border: none !important;
+    border-radius: 0;
+    box-shadow: none !important;
+    background-color: transparent !important;
+
+    filter: drop-shadow(0 0 5px rgba(255, 160, 0, 0.4));
+    display: inline-block;
+}
+
+.sub-title::before {
+    content: none !important;
+    display: none !important;
+}
+
+.main-title {
+    font-family: 'Orbitron', sans-serif;
+    color: #fff !important;
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0.8) 80%, transparent 100%);
+    width: 100%;
+    padding: 10px 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
+
+    /* USER REQUEST: Slow Float */
+    animation: title-float 6s ease-in-out infinite;
+}
+
+@keyframes title-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* ... Buy Button Styles (Keep Existing) ... */
+
+/* 4. GALLERY CAROUSEL */
+.gallery-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.gallery-frame {
+    width: 200px !important;
+    height: 200px !important;
+    background: #000 !important;
+    border-radius: 15px !important;
+    border: 1px solid #333 !important;
+    overflow: hidden !important;
+    position: relative;
+    box-shadow: inset 0 0 20px #000 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* Smooth hover */
+}
+
+/* USER REQUEST: Hover Glow */
+.gallery-frame:hover {
+    border-color: #FFC800 !important;
+    /* Gold */
+    box-shadow:
+        0 0 20px rgba(255, 200, 0, 0.3),
+        inset 0 0 10px rgba(255, 200, 0, 0.1) !important;
+    transform: scale(1.05);
+    /* Slight lift */
+}
+
+.gallery-frame:active {
+    transform: scale(0.98);
+}
+
+/* ... Images ... */
+
+/* 5. STATS FOOTER REFINEMENT */
+/* ... (Keep layout) ... */
+
+/* USER REQUEST: Copy Button Neon Cyan */
+.copy-btn {
+    cursor: pointer;
+    margin-left: 8px;
+    color: #00F3FF !important;
+    /* Cyan */
+    font-weight: bold;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    text-shadow: 0 0 8px #00F3FF;
+    transform: scale(1.1);
+}
+
+/* USER REQUEST: '17' Gold & Float */
+.highlight-17 {
+    display: inline-block;
+    /* Required for transform */
+    color: #FFC800 !important;
+    /* Gold Orange */
+    font-weight: 900 !important;
+    font-size: 0.85rem !important;
+    /* Slightly bigger pop */
+    animation: float-micro 3s ease-in-out infinite;
+    text-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+}
+
+@keyframes float-micro {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+/* 3. BUTTON (INITIALIZE BUY) */
+button.buy-btn-large {
+    position: relative;
+    width: 100%;
+    height: 60px;
+
+    /* USER REQUEST: Move Up 5px */
+    margin-top: -5px;
+
+    background: linear-gradient(180deg, #FFB800 0%, #FF9F00 100%) !important;
+    /* ORANGE FORCE */
+    border: none !important;
+    border-radius: 12px !important;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s;
+    box-shadow: 0 0 20px rgba(255, 138, 0, 0.4) !important;
+}
+
+button.buy-btn-large:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 0 30px rgba(255, 138, 0, 0.6) !important;
+}
+
+.buy-btn-large:active {
+    transform: scale(0.98);
+}
+
+.buy-btn-large .btn-text {
+    font-family: 'Orbitron', sans-serif;
+    color: #000 !important;
+    font-size: 1.4rem;
+    font-weight: 900;
+    z-index: 2;
+    letter-spacing: 1px;
+}
+
+.buy-btn-large .scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    /* Double height for scrolling */
+    background: repeating-linear-gradient(0deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 3px);
+    z-index: 1;
+    pointer-events: none;
+    animation: scan-scroll 0.5s linear infinite;
+    /* FAST SCROLL */
+    opacity: 0.5;
+}
+
+@keyframes scan-scroll {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+/* 4. GALLERY CAROUSEL */
+.gallery-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Stack row and dots */
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.gallery-main-row {
+    display: flex;
+    /* Row for Arrows + Frame */
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.gallery-frame {
+    width: 100%;
+    /* Try to fill space (up to max) */
+    max-width: 200px;
+    /* Original size limit */
+    height: auto !important;
+    /* Allow aspect ratio to drive height */
+    aspect-ratio: 1 / 1;
+    /* Keep square */
+    flex-shrink: 1;
+    /* Allow shrinking */
+    min-width: 0;
+    /* Allow shrinking past content size */
+
+    background: #000 !important;
+    border-radius: 15px !important;
+    border: 1px solid #333 !important;
+    overflow: hidden !important;
+    /* MASK IMAGE */
+    position: relative;
+    box-shadow: inset 0 0 20px #000 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+/* Flash Interaction */
+.gallery-frame:active {
+    border-color: #fff !important;
+    box-shadow: 0 0 30px #fff, inset 0 0 10px #fff !important;
+    transform: scale(0.98);
+}
+
+.gallery-frame:active .gallery-img {
+    filter: brightness(2);
+}
+
+.gallery-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: none;
+    /* Hidden by default */
+    transition: filter 0.1s;
+}
+
+.gallery-img.active {
+    display: block !important;
+}
+
+.gallery-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #444;
+    /* Default inactive */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+
+    animation: placeholder-pulse 2s infinite ease-in-out;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+/* Locked State styling for container */
+.gallery-container.locked .nav-arrow,
+.gallery-container.locked .pagination-dots {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.gallery-container.locked .gallery-frame {
+    border-color: #444 !important;
+    box-shadow: inset 0 0 30px #000 !important;
+}
+
+/* Active Placeholder (Attention) */
+.gallery-container.locked .gallery-placeholder {
+    color: #00F3FF;
+    text-shadow: 0 0 10px #00F3FF;
+}
+
+@keyframes placeholder-pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(0.95);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+.nav-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 15px;
+
+    flex-shrink: 0;
+    /* Never shrink arrows */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: all 0.2s;
+    color: transparent !important;
+}
+
+.nav-arrow:hover {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 5px #fff);
+}
+
+/* Make actual arrows using CSS Border (Chevron) */
+.nav-arrow::after {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-top: 3px solid #666;
+    /* Base Color */
+    border-right: 3px solid #666;
+}
+
+.nav-arrow:hover::after {
+    border-color: #fff;
+    /* Hover Color */
+}
+
+/* Rotate for directions */
+.nav-arrow.left::after {
+    transform: rotate(-135deg);
+    margin-left: 5px;
+}
+
+.nav-arrow.right::after {
+    transform: rotate(45deg);
+    margin-right: 5px;
+}
+
+.pagination-dots {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* USER REQUEST: "Just White" Dots */
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #666 !important;
+    /* Inactive Grey */
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.dot.active {
+    background: #FFF !important;
+    /* Pure White */
+    box-shadow: 0 0 8px #FFF !important;
+    /* White Glow */
+}
+
+/* 5. STATS FOOTER REFINEMENT */
+/* 5. STATS FOOTER REFINEMENT (NANO-ALIGNMENT) */
+.stats-footer {
+    width: 100%;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    /* Align Bottoms for Baseline Sync */
+    gap: 10px;
+}
+
+.stat-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+    position: relative;
+}
+
+/* Vertical Divider */
+.stat-col:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    /* Align with text */
+    height: 70%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.stat-label {
+    font-family: 'Orbitron', sans-serif;
+    color: #666 !important;
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.stat-value {
+    font-family: 'Orbitron', sans-serif !important;
+    font-weight: 400 !important;
+    /* Standard Weight */
+    color: #eee !important;
+    font-size: 0.7rem !important;
+    /* Consistent Size */
+    letter-spacing: 0.5px;
+
+    display: flex;
+    align-items: baseline;
+    /* KEY: Baseline Alignment */
+    justify-content: center;
+
+    /* "날씬하게" (Slim Look) */
+    transform: scaleX(0.9);
+    transform-origin: center bottom;
+    white-space: nowrap;
+}
+
+/* Special Treatments */
+.stat-value.red-burn {
+    color: #FF4444 !important;
+    font-weight: 600 !important;
+}
+
+/* Copy Button Styling */
+.copy-btn {
+    cursor: pointer;
+    color: #00F3FF !important;
+    font-weight: 900;
+    font-size: 0.6rem;
+    padding-left: 5px;
+    position: relative;
+    top: -1px;
+    /* Micro adjustment if needed */
+}
+
+/* Number 17 Highlight - STRICT ALIGNMENT */
+.highlight-17 {
+    display: inline-block;
+    color: #FFC800 !important;
+    font-weight: 900 !important;
+    /* Bold */
+    font-size: 0.7rem !important;
+    /* Match Parent Exactly */
+
+    /* Remove vertical float to ensure alignment */
+    /* animation: float-micro 3s... REMOVED for alignment */
+
+    text-shadow: 0 0 5px rgba(255, 160, 0, 0.6);
+    margin: 0 1px;
+    /* Tiny breathing room */
+}
+
+/* 6. IMAGE MODAL (Lightbox) */
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.image-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 1px solid #333;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.image-modal.active .modal-img {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #FF4444;
+}
+
+/* 4. GALLERY CAROUSEL (Scale & Fit) */
+.gallery-frame {
+    width: 200px !important;
+    /* Reverted to Compact Size */
+    height: 200px !important;
+    background: #000 !important;
+    border-radius: 15px !important;
+    border: 1px solid #333 !important;
+    overflow: hidden !important;
+    position: relative;
+    box-shadow: inset 0 0 20px #000, 0 0 20px rgba(0, 0, 0, 0.5) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-in;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.gallery-frame:hover {
+    border-color: #FFC800 !important;
+    box-shadow: 0 0 20px rgba(255, 200, 0, 0.3) !important;
+    transform: scale(1.05);
+}
+
+.gallery-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    /* Keep Full Fit */
+    display: none;
+    transition: filter 0.2s;
+}
+
+.gallery-img.active {
+    display: block !important;
+}
+
+/* 5. STATS FOOTER REFINEMENT (Tight Layout) */
+.stats-footer {
+    width: 100%;
+    margin-top: 15px;
+    /* Reduced from 25px */
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    /* Align Bottoms for Baseline Sync */
+    gap: 5px;
+    /* Tighter gap */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 380px) {
+    .stats-footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .main-title {
+        font-size: 1.8rem;
+    }
+}

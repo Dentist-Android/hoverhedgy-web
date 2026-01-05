@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HOVERHEDGY // SYSTEM BOOT</title>
+    <!-- Fonts: Retro & Future -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- === CRT FILTER (Scanlines) === -->
+    <div class="crt-lines"></div>
+
+    <!-- === PAGE 1: PRE-BOOT (Design Refined) === -->
+    <section id="page-boot" class="active-section">
+        <!-- Decoration: Corner Info -->
+        <div class="bios-header">
+            <span class="bios-item left">MEM: 64KB OK</span>
+            <span class="bios-item right">V.1.0.4</span>
+        </div>
+
+        <div class="terminal-content">
+            <h1 class="boot-title" data-text="HOVERHEDGY">HOVERHEDGY</h1>
+
+            <!-- Typewriter Area (Aligned to Logo) -->
+            <div class="boot-status">
+                <div class="type-line" data-text="FLUX PINNING ... STABLE"></div>
+                <div class="type-line" data-text="ZERO RESISTANCE ... CONFIRMED"></div>
+                <div class="type-line" data-text="MEISSNER EFFECT ... DETECTED"></div>
+            </div>
+        </div>
+
+        <div class="touch-hint-zone">
+            <span class="touch-hint blink hidden">[ START EXPERIMENT ]</span>
+        </div>
+    </section>
+
+    <!-- === PAGE 2: THE LAB (Physics Experiment) === -->
+    <section id="page-lab">
+        <div class="global-bloom"></div>
+        <!-- Overlay UI -->
+        <!-- Overlay UI (Restructured for Bracket Alignment) -->
+        <div class="cam-overlay">
+            <div class="focus-brackets">
+                <!-- UI IS NOW INSIDE THE BRACKETS -->
+                <div class="header-ui">
+                    <div class="rec-status">
+                        REC <span class="dot"></span> <span class="timestamp">2026-01-05</span>
+                    </div>
+                    <div class="lab-title">SUBJECT: 99-17-22 HOVERHEDGY</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Viewport (Center Stage) -->
+        <div class="lab-viewport">
+            <div class="autofocus-layer"></div>
+            <!-- Magnet Base Layer -->
+            <div class="magnet-group">
+                <img src="assets/magnet.png" class="magnet-img" alt="Magnet Base" draggable="false">
+                <div class="magnet-shadow"></div>
+                <div class="magnet-glow"></div>
+            </div>
+
+            <!-- Hedgy Character Layer -->
+            <div class="specimen-group" id="hedgy-actor">
+                <!-- Spark Layers (Behind Mascot) -->
+                <div class="spark-system">
+                    <div class="spark-layer layer-2"></div>
+                    <div class="spark-layer layer-3"></div>
+                    <div class="spark-layer layer-4"></div>
+                    <div class="spark-layer layer-5"></div>
+                    <div class="spark-layer layer-6"></div>
+                </div>
+
+                <div class="mascot-frame">
+                    <!-- Bloom is now the Custom Aurora Image -->
+                    <img src="assets/hoverhedgy-c/orora.png" class="mascot-bloom" alt="" draggable="false">
+                    <img src="assets/hoverhedgy-c/hedgy.png" class="hedgy-img" id="hedgy-sprite" alt="HoverHedgy"
+                        draggable="false">
+                </div>
+
+                <!-- Face Spark Overlay (Top Layer) -->
+                <div class="face-spark"></div>
+
+                <div class="shockwave-ring"></div>
+            </div>
+
+        </div>
+
+        </div>
+
+        <!-- Bottom HUD -->
+        <div class="hud-bottom">
+            <div class="status-panel">
+                <span class="status-label">FLUX DENSITY:</span>
+                <span class="status-val" id="levitation-status">0.0T</span>
+            </div>
+            <div class="energy-bar-frame">
+                <div class="energy-segments" id="energy-gauge">
+                    <!-- Dynamic Segments will be injected here -->
+                </div>
+            </div>
+            <p class="guide-text blink">[ RAPID TAP TO CHARGE ]</p>
+        </div>
+    </section>
+
+    <!-- PAGE 3: MARKET (SUCCESS) -->
+    <section id="page-market" class="hidden-section">
+        <div class="reward-msg">QUANTUM LOCK CONFIRMED<br><span
+                style="font-size:0.8em; color:#D4FF00; margin-top:5px; display:block;">ISSUING REWARD CARD...</span>
+        </div>
+        <div class="market-aurora"></div>
+        <div class="market-card">
+            <!-- Header -->
+            <div class="success-header">
+                <h2 class="sub-title">PROJECT SUCCESS</h2>
+                <h1 class="main-title">HOVERHEDGY</h1>
+            </div>
+
+            <!-- Action Button -->
+            <button id="btn-buy-final" class="buy-btn-large">
+                <span class="btn-text">INITIALIZE BUY</span>
+                <div class="scanlines"></div>
+            </button>
+
+            <!-- Gallery Carousel -->
+            <div class="gallery-container">
+                <div class="gallery-main-row">
+                    <button class="nav-arrow left">◀</button>
+                    <div class="gallery-frame">
+                        <div class="gallery-placeholder">$HEDGY</div>
+                        <img src="assets/hoverhedgy-c/hedgy.png" alt="HoverHedgy" class="gallery-img">
+                    </div>
+                    <button class="nav-arrow right">▶</button>
+                </div>
+                <div class="pagination-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+
+            <!-- Stats Footer -->
+            <div class="stats-footer">
+                <div class="stat-col">
+                    <span class="stat-label">TOTAL SUPPLY</span>
+                    <span class="stat-value">99,<span class="highlight-17">17</span>2,200,000</span>
+                </div>
+                <div class="stat-col contract-col">
+                    <span class="stat-label border-label">CONTRACT</span>
+                    <span class="stat-value" id="final-ca-val">BdQh...TxR <span class="copy-btn">[COPY]</span></span>
+                </div>
+                <div class="stat-col">
+                    <span class="stat-label">LP STATUS</span>
+                    <span class="stat-value red-burn">100% BURNED</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
