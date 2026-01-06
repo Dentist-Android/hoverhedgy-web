@@ -680,7 +680,7 @@ to {
     width: 100%;
     height: 100%;
 
-    background: url('assets/hedgy_promo_02.jpg') no-repeat center center;
+    background: url('assets/hedgy_v2_spark.jpg') no-repeat center center;
     background-size: contain;
 
     /* ORIGINAL COLORS: Stronger Contrast */
@@ -825,7 +825,13 @@ body.market-mode #crt-effect {
     visibility: hidden !important;
 }
 
-
+/* UPDATE STATS FONT SIZE (User Request: Smaller) */
+.stat-value {
+    font-size: 0.6rem !important;
+    /* Micro Text */
+    font-weight: 300 !important;
+    letter-spacing: 0.5px !important;
+}
 
 
 
@@ -1111,9 +1117,9 @@ body.market-mode #crt-effect {
     left: 50%;
     transform: translate3d(-50%, -50%, 50px);
     /* FORCE FRONT via 3D transform */
-    width: 75%;
-    /* Increased again */
-    height: 75%;
+    width: 50%;
+    /* Reduced to 50% (Tiny) */
+    height: 50%;
     background: url('assets/spark/face-spark.png') no-repeat center center;
     background-size: contain;
     mix-blend-mode: screen;
@@ -2162,7 +2168,204 @@ button.buy-btn-large {
 /* USER REQUEST: Copy Button Neon Cyan */
 .copy-btn {
     cursor: pointer;
-    margin-left: 0px;
+    margin-left: 8px;
+    color: #00F3FF !important;
+    /* Cyan */
+    font-weight: bold;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.copy-btn:hover {
+    text-shadow: 0 0 8px #00F3FF;
+    transform: scale(1.1);
+}
+
+/* USER REQUEST: '17' Gold & Float */
+.highlight-17 {
+    display: inline-block;
+    /* Required for transform */
+    color: #FFC800 !important;
+    /* Gold Orange */
+    font-weight: 900 !important;
+    font-size: 0.85rem !important;
+    /* Slightly bigger pop */
+    animation: float-micro 3s ease-in-out infinite;
+    text-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+}
+
+@keyframes float-micro {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+/* 3. BUTTON (INITIALIZE BUY) */
+button.buy-btn-large {
+    position: relative;
+    width: 100%;
+    height: 60px;
+
+    /* USER REQUEST: Move Up 5px */
+    margin-top: -5px;
+
+    background: linear-gradient(180deg, #FFB800 0%, #FF9F00 100%) !important;
+    /* ORANGE FORCE */
+    border: none !important;
+    border-radius: 12px !important;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s;
+    box-shadow: 0 0 20px rgba(255, 138, 0, 0.4) !important;
+}
+
+button.buy-btn-large:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+    box-shadow: 0 0 30px rgba(255, 138, 0, 0.6) !important;
+}
+
+.buy-btn-large:active {
+    transform: scale(0.98);
+}
+
+.buy-btn-large .btn-text {
+    font-family: 'Orbitron', sans-serif;
+    color: #000 !important;
+    font-size: 1.4rem;
+    font-weight: 900;
+    z-index: 2;
+    letter-spacing: 1px;
+}
+
+.buy-btn-large .scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    /* Double height for scrolling */
+    background: repeating-linear-gradient(0deg,
+            transparent 0px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.1) 3px);
+    z-index: 1;
+    pointer-events: none;
+    animation: scan-scroll 0.5s linear infinite;
+    /* FAST SCROLL */
+    opacity: 0.5;
+}
+
+@keyframes scan-scroll {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+.sub-title::before {
+    content: none !important;
+    display: none !important;
+}
+
+.main-title {
+    font-family: 'Orbitron', sans-serif;
+    color: #fff !important;
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0.8) 80%, transparent 100%);
+    width: 100%;
+    padding: 10px 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
+
+    /* USER REQUEST: Slow Float */
+    animation: title-float 6s ease-in-out infinite;
+}
+
+@keyframes title-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* ... Buy Button Styles (Keep Existing) ... */
+
+/* 4. GALLERY CAROUSEL */
+.gallery-container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+    position: relative;
+}
+
+.gallery-frame {
+    width: 200px !important;
+    height: 200px !important;
+    background: #000 !important;
+    border-radius: 15px !important;
+    border: 1px solid #333 !important;
+    overflow: hidden !important;
+    position: relative;
+    box-shadow: inset 0 0 20px #000 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    /* Smooth hover */
+}
+
+/* USER REQUEST: Hover Glow */
+.gallery-frame:hover {
+    border-color: #FFC800 !important;
+    /* Gold */
+    box-shadow:
+        0 0 20px rgba(255, 200, 0, 0.3),
+        inset 0 0 10px rgba(255, 200, 0, 0.1) !important;
+    transform: scale(1.05);
+    /* Slight lift */
+}
+
+.gallery-frame:active {
+    transform: scale(0.98);
+}
+
+/* ... Images ... */
+
+/* 5. STATS FOOTER REFINEMENT */
+/* ... (Keep layout) ... */
+
+/* USER REQUEST: Copy Button Neon Cyan */
+.copy-btn {
+    cursor: pointer;
+    margin-left: 8px;
     color: #00F3FF !important;
     /* Cyan */
     font-weight: bold;
@@ -2271,219 +2474,98 @@ button.buy-btn-large:hover {
 }
 
 /* 4. GALLERY CAROUSEL */
-.gallery-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    /* Stack row and dots */
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin: 10px 0;
-    position: relative;
-}
-
+/* === ULTIMATE RESPONSIVE GALLERY FIX === */
 .gallery-main-row {
-    display: flex;
-    /* Row for Arrows + Frame */
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    gap: 15px !important;
+    /* Slightly wider gap */
 }
 
 .gallery-frame {
-    width: 100%;
-    /* Try to fill space (up to max) */
-    max-width: 200px;
-    /* Original size limit */
-    height: auto !important;
-    /* Allow aspect ratio to drive height */
-    aspect-ratio: 1 / 1;
-    /* Keep square */
-    flex-shrink: 1;
-    /* Allow shrinking */
-    min-width: 0;
-    /* Allow shrinking past content size */
-
-    background: #000 !important;
-    border-radius: 15px !important;
-    border: 1px solid #333 !important;
-    overflow: hidden !important;
-    /* MASK IMAGE */
-    position: relative;
-    box-shadow: inset 0 0 20px #000 !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.1s;
-}
-
-/* Flash Interaction */
-.gallery-frame:active {
-    border-color: #fff !important;
-    box-shadow: 0 0 30px #fff, inset 0 0 10px #fff !important;
-    transform: scale(0.98);
-}
-
-.gallery-frame:active .gallery-img {
-    filter: brightness(2);
-}
-
-.gallery-img {
+    /* FLEXIBLE FRAME (SQUARE LOCK) */
+    flex: 0 1 auto !important;
     width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    display: none;
-    /* Hidden by default */
-    transition: filter 0.1s;
-}
+    max-width: 200px !important;
+    aspect-ratio: 1 / 1 !important;
+    /* Force Square */
+    height: auto !important;
+    /* Let aspect-ratio decide */
 
-.gallery-img.active {
-    display: block !important;
-}
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 
-.gallery-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #444;
-    /* Default inactive */
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
-
-    animation: placeholder-pulse 2s infinite ease-in-out;
-    opacity: 1;
-    transition: opacity 0.3s;
-}
-
-/* Locked State styling for container */
-.gallery-container.locked .nav-arrow,
-.gallery-container.locked .pagination-dots {
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
-
-.gallery-container.locked .gallery-frame {
-    border-color: #444 !important;
-    box-shadow: inset 0 0 30px #000 !important;
-}
-
-/* Active Placeholder (Attention) */
-.gallery-container.locked .gallery-placeholder {
-    color: #00F3FF;
-    text-shadow: 0 0 10px #00F3FF;
-}
-
-@keyframes placeholder-pulse {
-
-    0%,
-    100% {
-        opacity: 0.5;
-        transform: scale(0.95);
-    }
-
-    50% {
-        opacity: 1;
-        transform: scale(1.05);
-    }
+    /* Premium Border Upgrade */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(0, 243, 255, 0.2) !important;
+    background: #000 !important;
+    position: relative !important;
+    border-radius: 12px !important;
 }
 
 .nav-arrow {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 15px;
-
-    flex-shrink: 0;
-    /* Never shrink arrows */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.6;
+    flex: 0 0 30px !important;
+    font-size: 1.5rem !important;
+    color: #666 !important;
+    /* Visible Text */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     transition: all 0.2s;
-    color: transparent !important;
+    opacity: 0.5;
+    padding: 0 !important;
 }
 
 .nav-arrow:hover {
+    color: #fff !important;
     opacity: 1;
     transform: scale(1.2);
-    filter: drop-shadow(0 0 5px #fff);
+    text-shadow: 0 0 10px #fff;
 }
 
-/* Make actual arrows using CSS Border (Chevron) */
+/* Remove CSS Chevron Hack */
 .nav-arrow::after {
-    content: '';
-    display: block;
-    width: 12px;
-    height: 12px;
-    border-top: 3px solid #666;
-    /* Base Color */
-    border-right: 3px solid #666;
+    display: none !important;
 }
 
-.nav-arrow:hover::after {
-    border-color: #fff;
-    /* Hover Color */
-}
-
-/* Rotate for directions */
-.nav-arrow.left::after {
-    transform: rotate(-135deg);
-    margin-left: 5px;
-}
-
-.nav-arrow.right::after {
-    transform: rotate(45deg);
-    margin-right: 5px;
-}
-
-.pagination-dots {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-/* USER REQUEST: "Just White" Dots */
+/* Pagination Dots Pop */
 .dot {
-    width: 8px;
-    height: 8px;
-    background: #666 !important;
-    /* Inactive Grey */
+    width: 6px;
+    height: 6px;
+    background: #444 !important;
     border-radius: 50%;
-    transition: all 0.3s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .dot.active {
     background: #FFF !important;
-    /* Pure White */
-    box-shadow: 0 0 8px #FFF !important;
-    /* White Glow */
+    box-shadow: 0 0 10px #FFF, 0 0 20px #FFF !important;
+    transform: scale(1.8) translateY(-2px);
+    /* Pop Up & Grow */
 }
 
-/* 5. STATS FOOTER REFINEMENT */
-/* 5. STATS FOOTER REFINEMENT (NANO-ALIGNMENT) */
+/* 5. STATS FOOTER REFINEMENT (Flexible Font Size) */
 .stats-footer {
     width: 100%;
-    margin-top: 25px;
+    margin-top: 15px;
     padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    /* Align Bottoms for Baseline Sync */
-    gap: 10px;
+    gap: 5px;
 }
 
 .stat-col {
@@ -2492,200 +2574,500 @@ button.buy-btn-large:hover {
     align-items: center;
     justify-content: flex-end;
     flex: 1;
-    position: relative;
-}
-
-/* Vertical Divider */
-.stat-col:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    bottom: 5px;
-    /* Align with text */
-    height: 70%;
-    width: 1px;
-    background: rgba(255, 255, 255, 0.1);
+    font-variation-settings: "wdth" 75;
+    /* Optional if font supports */
+    min-width: 0;
+    /* Allow shrinking */
 }
 
 .stat-label {
     font-family: 'Orbitron', sans-serif;
     color: #666 !important;
-    font-size: 0.5rem;
+    /* Responsive Font Scale */
+    font-size: clamp(8px, 2.5vw, 10px) !important;
     font-weight: 700;
-    letter-spacing: 1px;
     margin-bottom: 4px;
     text-transform: uppercase;
-    opacity: 0.8;
+    white-space: nowrap;
 }
 
 .stat-value {
     font-family: 'Orbitron', sans-serif !important;
-    font-weight: 400 !important;
-    /* Standard Weight */
     color: #eee !important;
-    font-size: 0.6rem !important;
-    /* Consistent Size */
-    letter-spacing: 0px;
-
-    display: flex;
-    align-items: baseline;
-    /* KEY: Baseline Alignment */
-    justify-content: center;
-
-    /* "날씬하게" (Slim Look) */
-    transform: scaleX(0.85);
-    transform-origin: center bottom;
+    /* Responsive Font Scale for Values */
+    font-size: clamp(9px, 3vw, 12px) !important;
+    letter-spacing: 0;
+    /* Tighter */
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    /* Just clip if extreme */
+    width: 100%;
+    text-align: center;
 }
 
-/* Special Treatments */
-.stat-value.red-burn {
-    color: #FF4444 !important;
-    font-weight: 600 !important;
-}
-
-/* Copy Button Styling */
+/* Hidden Copy Button text but keep structure if needed */
 .copy-btn {
-    cursor: pointer;
-    color: #00F3FF !important;
-    font-weight: 900;
-    font-size: 0.6rem;
-    padding-left: 2px;
+    display: none !important;
+    /* Hide [COPY] text per user request */
+}
+
+/* Blink Animation Restore */
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.rec-status .dot {
+    background: #FF0000 !important;
+    box-shadow: 0 0 5px #FF0000 !important;
+    animation: blink 1s infinite;
+}
+
+
+/* === SNAKE BORDER EFFECT === */
+.market-card {
     position: relative;
-    top: -1px;
-    /* Micro adjustment if needed */
+    overflow: hidden;
 }
 
-/* Number 17 Highlight - STRICT ALIGNMENT */
-.highlight-17 {
-    display: inline-block;
-    color: #FFC800 !important;
-    font-weight: 900 !important;
-    /* Bold */
-    font-size: 0.7rem !important;
-    /* Match Parent Exactly */
-
-    /* Remove vertical float to ensure alignment */
-    /* animation: float-micro 3s... REMOVED for alignment */
-
-    text-shadow: 0 0 5px rgba(255, 160, 0, 0.6);
-    margin: 0 1px;
-    /* Tiny breathing room */
-}
-
-/* 6. IMAGE MODAL (Lightbox) */
-.image-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.95);
-    z-index: 10000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    backdrop-filter: blur(10px);
-}
-
-.image-modal.active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.modal-img {
-    max-width: 90%;
-    max-height: 90%;
-    border: 1px solid #333;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-    border-radius: 8px;
-    transform: scale(0.9);
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.image-modal.active .modal-img {
-    transform: scale(1);
-}
-
-.modal-close {
+.market-card::after {
+    content: '';
     position: absolute;
-    top: 20px;
-    right: 30px;
-    color: #fff;
-    font-size: 2rem;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    z-index: -1;
+    animation: steam 20s linear infinite;
+    border-radius: 26px;
+}
+
+@keyframes steam {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+/* Ensure inner content masks the gradient center */
+.market-card::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: #050505;
+    z-index: -1;
+    border-radius: 22px;
+}
+
+
+/* === REPAIR & REFINE: CLASSY BORDER === */
+.market-card {
+    background: #080808 !important;
+    /* Force Dark Core */
+    overflow: visible !important;
+    /* Allow glow to spill */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Remove previous tacky pseudo-elements */
+.market-card::after,
+.market-card::before {
+    content: none !important;
+}
+
+/* New Subtle Moving Light */
+.market-card-border {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 24px;
+    padding: 2px;
+    background: conic-gradient(from var(--angle), transparent 50%, #FFD700 85%, #00F3FF 100%);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: 100;
+    pointer-events: none;
+    animation: rotate 4s linear infinite;
+}
+
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes rotate {
+    to {
+        --angle: 360deg;
+    }
+}
+
+/* Fallback for no @property support (simple opacity pulse) */
+@supports not (background: paint(something)) {
+    .market-card {
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        animation: border-pulse-classy 3s infinite alternate;
+    }
+}
+
+@keyframes border-pulse-classy {
+    0% {
+        border-color: rgba(255, 215, 0, 0.3);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+    }
+
+    100% {
+        border-color: rgba(0, 243, 255, 0.6);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    }
+}
+
+
+/* === FINAL BORDER POLISH (THINNER & SPARKLY) === */
+.market-card-border {
+    padding: 1.5px !important;
+    /* Thinner line */
+    /* Sharper gradient with White Core for Sparkle */
+    background: conic-gradient(from var(--angle), transparent 50%, #FFD700 80%, #fff 95%, #00F3FF 100%) !important;
+    /* Double Glow for Bling Effect */
+    filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 8px #00F3FF) !important;
+}
+
+/* === EMERGENCY REPAIR: UI NORMALIZATION === */
+/* 1. ARROW FIX (CSS SHAPE) */
+.nav-arrow {
+    width: 40px !important;
+    height: 40px !important;
+    background: none !important;
+    border: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    color: transparent !important;
+    /* Hide any accidental text */
+    font-size: 0 !important;
+    opacity: 0.7;
     cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    transition: color 0.2s;
 }
 
-.modal-close:hover {
-    color: #FF4444;
-}
-
-/* 4. GALLERY CAROUSEL (Scale & Fit) */
-.gallery-frame {
-    width: 200px !important;
-    /* Reverted to Compact Size */
-    height: 200px !important;
-    background: #000 !important;
-    border-radius: 15px !important;
-    border: 1px solid #333 !important;
-    overflow: hidden !important;
-    position: relative;
-    box-shadow: inset 0 0 20px #000, 0 0 20px rgba(0, 0, 0, 0.5) !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: zoom-in;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.gallery-frame:hover {
-    border-color: #FFC800 !important;
-    box-shadow: 0 0 20px rgba(255, 200, 0, 0.3) !important;
-    transform: scale(1.05);
-}
-
-.gallery-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    /* Keep Full Fit */
-    display: none;
-    transition: filter 0.2s;
-}
-
-.gallery-img.active {
+.nav-arrow::after {
+    content: '' !important;
     display: block !important;
+    width: 15px !important;
+    height: 15px !important;
+    border-top: 3px solid #888 !important;
+    border-right: 3px solid #888 !important;
+    transform: none !important;
+    transition: all 0.2s;
 }
 
-/* 5. STATS FOOTER REFINEMENT (Tight Layout) */
+.nav-arrow:hover::after {
+    border-color: #fff !important;
+    filter: drop-shadow(0 0 5px #fff);
+}
+
+.nav-arrow.left::after {
+    transform: rotate(-135deg) !important;
+    margin-left: 5px;
+}
+
+.nav-arrow.right::after {
+    transform: rotate(45deg) !important;
+    margin-right: 5px;
+}
+
+/* 2. STATS FOOTER FIX (NO CLAMP, SAFE SIZE) */
 .stats-footer {
-    width: 100%;
-    margin-top: 15px;
-    /* Reduced from 25px */
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    /* Align Bottoms for Baseline Sync */
-    gap: 5px;
-    /* Tighter gap */
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+    width: 100% !important;
+    gap: 2px !important;
 }
 
-/* Mobile Adjustments */
-@media (max-width: 380px) {
-    .stats-footer {
-        flex-direction: column;
-        gap: 15px;
+.stat-col {
+    flex: 1 1 0px !important;
+    /* Equal width */
+    min-width: 0 !important;
+    text-align: center !important;
+}
+
+.stat-label {
+    font-size: 10px !important;
+    color: #666;
+    margin-bottom: 3px;
+}
+
+.stat-value {
+    font-size: 11px !important;
+    color: #fff;
+    white-space: nowrap !important;
+}
+
+/* Mobile Specific */
+@media (max-width: 360px) {
+    .stat-label {
+        font-size: 8px !important;
     }
 
-    .main-title {
-        font-size: 1.8rem;
+    .stat-value {
+        font-size: 9px !important;
     }
 }
+
+/* 3. GALLERY LAYOUT SAFETY */
+.gallery-main-row {
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
+    gap: 0 !important;
+    /* Let justify-space-between handle it if needed, or small gap */
+}
+/* === EMERGENCY OVERRIDE & REPAIR === */
+/* 1. RESET BROKEN LAYOUT */
+.market-card {
+    width: 90% !important; max-width: 400px !important;
+    background: #080808 !important; /* DARK RESET */
+    border-radius: 15px !important;
+    padding: 20px !important;
+    display: flex !important; flex-direction: column !important;
+    align-items: center !important; gap: 10px !important;
+    position: relative !important;
+    transform: none !important; /* STOP GIANT SCALE */
+    opacity: 1 !important; /* FORCE VISIBLE */
+    filter: none !important; /* REMOVE BLUR */
+    animation: none !important;
+}
+
+/* 2. REPAIR TITLE */
+.main-title {
+    font-size: 2rem !important; color: white !important;
+    display: block !important; width: 100% !important;
+    text-align: center !important; margin: 10px 0 !important;
+    position: relative !important; top: 0 !important; left: 0 !important;
+}
+
+/* 3. REPAIR GALLERY */
+.gallery-container {
+    width: 100% !important; 
+    display: flex !important; flex-direction: column !important; 
+    align-items: center !important;
+}
+.gallery-main-row {
+    display: flex !important; flex-direction: row !important;
+    justify-content: center !important; align-items: center !important;
+    gap: 5px !important; width: 100% !important;
+}
+.gallery-frame {
+    width: 180px !important; height: 180px !important;
+    aspect-ratio: 1/1 !important;
+    flex-shrink: 0 !important;
+    background: black !important;
+}
+.gallery-img {
+    width: 100% !important; height: 100% !important; object-fit: cover !important;
+}
+/* 4. ARROW FIX (PURE CSS CHEVRON) */
+.nav-arrow {
+    width: 30px !important; height: 30px !important;
+    background: none !important; border: none !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+    opacity: 0.8 !important;
+}
+.nav-arrow::after {
+    content: '' !important; display: block !important;
+    width: 10px !important; height: 10px !important;
+    border-top: 2px solid #888 !important; border-right: 2px solid #888 !important;
+}
+.nav-arrow.left::after { transform: rotate(-135deg) !important; }
+.nav-arrow.right::after { transform: rotate(45deg) !important; }
+
+/* 5. STATS GRID FIX */
+.stats-footer {
+    display: grid !important; grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 2px !important; width: 100% !important; margin-top: 10px !important;
+}
+.stat-col {
+    display: flex !important; flex-direction: column !important; align-items: center !important;
+    justify-content: center !important; width: 100% !important;
+}
+.stat-label { font-size: 9px !important; color: #666 !important; }
+.stat-value { font-size: 10px !important; color: #eee !important; white-space: nowrap !important; }
+
+/* 6. HIDE BROKEN ELEMENTS */
+.scanlines, .sub-title::before { display: none !important; }
+
+
+/* === ABSOLUTE FINAL EMERGENCY REPAIR === */
+.market-card { 
+    transform: none !important; 
+    opacity: 1 !important; 
+    filter: none !important; 
+    border-radius: 12px !important;
+    background: #000 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+.sub-title::before { content: none !important; display: none !important; }
+.scanlines { display: none !important; }
+
+@keyframes scan-scroll { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+
+
+/* === USER FEEDBACK FIXES (REWARD, SCRATCH, FONT) === */
+.reward-msg { display: none !important; } /* Kill Overlay */
+
+.stats-footer {
+    display: grid !important;
+    grid-template-columns: 1.2fr 1fr 1fr !important;
+    gap: 5px !important;
+    align-items: end !important;
+    margin-top: 20px !important;
+}
+.stat-label {
+    font-family: 'Orbitron', sans-serif !important;
+    color: #888 !important; font-weight: 700 !important;
+    font-size: 8px !important; margin-bottom: 2px !important;
+}
+.stat-value {
+    font-family: 'Courier New', monospace !important; /* Technical Font */
+    font-weight: 700 !important; font-size: 10px !important;
+    color: #eee !important; letter-spacing: -0.5px !important;
+    white-space: nowrap !important;
+}
+.copy-btn {
+    display: inline-block !important; font-size: 8px !important;
+    color: #00F3FF !important; margin-left: 3px; font-weight: 900;
+}
+
+/* Technical Grid for Scratch */
+canvas#scratch-pad {
+    background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+    background-color: #050505 !important;
+}
+
+
+/* === BREATHING OVERLAY === */
+.scratch-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 25;
+    pointer-events: none;
+    text-align: center;
+}
+.glow-text {
+    font-family: 'Bebas Neue', 'Impact', sans-serif !important;
+    font-size: 32px;
+    color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px #00F3FF;
+    animation: breathe-glow 2.5s ease-in-out infinite;
+    display: block;
+}
+.sub-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+    letter-spacing: 1px;
+}
+@keyframes breathe-glow {
+    0%, 100% { transform: scale(1); opacity: 0.8; text-shadow: 0 0 10px #00F3FF; }
+    50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 20px #00F3FF, 0 0 30px #00F3FF; }
+}
+
+
+/* === REWARD & ANIMATION RESTORE FINAL === */
+.market-card {
+    transform: scale(2) !important;
+    opacity: 0 !important;
+    filter: blur(10px) !important;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+.market-card.reveal {
+    transform: scale(1) !important;
+    opacity: 1 !important;
+    filter: none !important;
+}
+.reward-msg {
+    display: block !important;
+    position: fixed !important;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    pointer-events: none;
+}
+
+
+/* === VISUAL REFINEMENT STEP 399 === */
+/* 1. VISIBLE CARD TEXTURE */
+.market-card {
+    background: repeating-linear-gradient(45deg, transparent 0, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 11px), linear-gradient(135deg, #0a0a0c, #000) !important;
+    background-blend-mode: overlay !important;
+}
+
+/* 2. GALLERY FRAME SIZE (Reduction) & DOTS FIX */
+.gallery-frame {
+    width: 160px !important; height: 160px !important;
+    margin-bottom: 25px !important;
+}
+.pagination-dots {
+    display: flex !important; justify-content: center !important;
+    width: 100% !important; margin-top: -15px !important;
+    position: relative !important; z-index: 10 !important; gap: 8px !important;
+}
+.dot { width: 6px !important; height: 6px !important; background: #444 !important; display: block !important; }
+.dot.active { background: #fff !important; }
+
+/* 3. STATS FOOTER POSITION (Move UP) */
+.stats-footer {
+    margin-top: 5px !important; padding-top: 10px !important;
+    transform: translateY(-5px);
+}
+
+/* 4. BEBAS NEUE STATS FONT (Perfect Alignment) */
+.stat-value {
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-size: 16px !important; font-weight: 400 !important;
+    letter-spacing: 1px !important; color: #fff !important;
+    display: flex !important; align-items: baseline !important; justify-content: center !important;
+}
+.highlight-17 {
+    font-family: 'Bebas Neue', sans-serif !important;
+    font-size: 16px !important; color: #FFD700 !important;
+    display: inline-block !important; transform: none !important;
+    vertical-align: baseline !important;
+}
+

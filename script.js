@@ -27,7 +27,8 @@ let state = {
 
     // IMPACT & PARALLAX STATE
     punchScale: 0,    // For screen zoom punch
-    gyro: { x: 0, y: 0 } // For device tilt parallax
+    gyro: { x: 0, y: 0 }, // For device tilt parallax
+    animPhase: 'GROUND'
 };
 
 // Gyro Listener (Mobile Tilt)
@@ -60,6 +61,18 @@ const EXPRESSIONS = {
 // DOM Cache
 let dom = {};
 
+// === GLOBAL GALLERY STATE (Scope Fix) ===
+let isGalleryLocked = true;
+let imgIndex = 0;
+// STRICT IMAGE LIST
+const images = [
+    'assets/image/gallery_hedgy_01.gif',
+    'assets/image/gallery_hedgy_02.gif',
+    'assets/image/gallery_hedgy_03.png',
+    'assets/image/gallery_hedgy_04.png',
+    'assets/image/gallery_hedgy_05.jpeg'
+];
+
 // Web Audio Context for Synth Sounds
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -67,10 +80,177 @@ function updateTimestamp() {
     const el = document.querySelector('.timestamp');
     if (el) {
         const now = new Date();
-        const str = now.toISOString().replace('T', ' ').substring(0, 19);
+        // US Format: JAN 06, 2026 04:00:00 PM
+        const options = {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        };
+        const str = now.toLocaleString('en-US', options).toUpperCase();
         el.innerText = str;
     }
     requestAnimationFrame(updateTimestamp);
+}
+
+// SCRATCH CARD LOGIC
+function initScratchCard() {
+    const container = document.querySelector('.gallery-frame');
+    const placeholder = document.querySelector('.gallery-placeholder');
+    const canvas = document.createElement('canvas');
+    canvas.id = 'scratch-pad';
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.zIndex = '20';
+    canvas.style.cursor = 'crosshair';
+
+    // Replace placeholder text with canvas
+    if (placeholder) placeholder.style.display = 'none';
+    container.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    const resize = () => {
+        width = canvas.width = container.offsetWidth;
+        height = canvas.height = container.offsetHeight;
+        resetCanvas();
+    };
+
+    // REFINED TECHNICAL SCRATCH ("Digital Decrypt")
+    const resetCanvas = () => {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#111';
+        ctx.fillRect(0, 0, width, height);
+
+        // HOLOGRAPHIC GRID (Technical Feel)
+        ctx.strokeStyle = '#00F3FF';
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 0.2;
+
+        ctx.beginPath();
+        for (let x = 0; x <= width; x += 20) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+        }
+        for (let y = 0; y <= height; y += 20) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+        }
+        ctx.stroke();
+        ctx.globalAlpha = 1.0;
+
+        // NO TEXT ON CANVAS - MOVED TO DOM FOR ANIMATION
+    };
+
+    // Create DOM Overlay for Breathing Text
+    let overlayText = container.querySelector('.scratch-label');
+    if (!overlayText) {
+        overlayText = document.createElement('div');
+        overlayText.className = 'scratch-label';
+        overlayText.innerHTML = '<span class="glow-text">$HEDGY</span><br><span class="sub-text">[ SCRATCH ]</span>';
+        container.appendChild(overlayText);
+    }
+
+
+
+
+    resize(); // Init
+
+    // Drawing Logic (Blocky Glitch Erase)
+
+    // Helper to fade out label
+    const hideLabel = () => {
+        if (overlayText && overlayText.style.opacity !== '0') {
+            overlayText.style.transition = 'opacity 0.3s';
+            overlayText.style.opacity = '0';
+            setTimeout(() => { if (overlayText) overlayText.style.display = 'none'; }, 300);
+        }
+    };
+
+    const getPos = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    };
+
+    const scratch = (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const { x, y } = getPos(e);
+
+        ctx.globalCompositeOperation = 'destination-out';
+
+        // Square "Pixel" Erase brushes
+        for (let i = 0; i < 3; i++) {
+            const size = 15 + Math.random() * 10;
+            const offsetX = (Math.random() - 0.5) * 20;
+            const offsetY = (Math.random() - 0.5) * 20;
+            ctx.fillRect(x + offsetX - size / 2, y + offsetY - size / 2, size, size);
+        }
+
+        checkClearance();
+    };
+
+    const checkClearance = () => {
+        // Throttle checks
+        if (Math.random() > 0.1) return;
+
+        const imgData = ctx.getImageData(0, 0, width, height);
+        const pixels = imgData.data;
+        let transparent = 0;
+        for (let i = 3; i < pixels.length; i += 4) {
+            if (pixels[i] === 0) transparent++;
+        }
+        const pct = (transparent / (pixels.length / 4)) * 100;
+        if (pct > 40) { // 40% cleared
+            unlockGallery();
+        }
+    };
+
+    const unlockGallery = () => {
+        canvas.style.transition = 'opacity 0.5s';
+        canvas.style.opacity = '0';
+        setTimeout(() => canvas.remove(), 500);
+
+        // Trigger existing unlock logic
+        const galleryContainer = document.querySelector('.gallery-container');
+        if (galleryContainer && galleryContainer.classList.contains('locked')) {
+            galleryContainer.classList.remove('locked');
+            // REMOVED AUDIO playAudio('success') per user request
+
+            // === CRITICAL FIX: Unlock Navigation ===
+            isGalleryLocked = false;
+
+            // Show first image correctly
+            const galleryImg = document.querySelector('.gallery-img');
+            if (galleryImg) {
+                galleryImg.classList.add('active');
+                galleryImg.style.opacity = '1';
+                galleryImg.src = images[0]; // Reset to first valid image
+                imgIndex = 0;
+            }
+            updateCarousel(); // Initialize dots and state
+        }
+    };
+
+    canvas.addEventListener('mousedown', (e) => { isDrawing = true; hideLabel(); scratch(e); });
+    canvas.addEventListener('mousemove', scratch);
+    window.addEventListener('mouseup', () => isDrawing = false);
+
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; hideLabel(); scratch(e); }, { passive: false });
+    canvas.addEventListener('touchmove', scratch, { passive: false });
+    window.addEventListener('touchend', () => isDrawing = false);
 }
 
 // Audio Logic
@@ -240,7 +420,28 @@ function physicsLoop() {
     if (state.altitude < 0) {
         state.altitude = 0;
         state.vel = Math.abs(state.vel) * 0.2; // Bounce
-        if (!state.isLevitating) setExpression('NORMAL');
+    }
+
+    // Expression Logic (Simplified Recommendation)
+    if (!state.isLevitating) {
+        if (state.vel > 1.0 && state.altitude > 1) { // 1. Ascending
+            if (state.animPhase !== 'ASC') {
+                state.animPhase = 'ASC';
+                setExpression('SHOCK_INTENSE'); // hedgy-01 (Fixed)
+            }
+        } else if (state.altitude > 1) { // 2. Descending (In Air)
+            if (state.animPhase !== 'DESC') {
+                state.animPhase = 'DESC';
+                setExpression('SHOCK_MILD'); // hedgy-05 (Fixed)
+            }
+        } else { // 3. Ground (Landed)
+            if (state.animPhase !== 'GROUND') {
+                state.animPhase = 'GROUND';
+                // Pick one random expression upon landing
+                const opts = ['FALL_1', 'NORMAL']; // hedgy-03, hedgy
+                setExpression(opts[Math.floor(Math.random() * opts.length)]);
+            }
+        }
     }
 
     // 3. Render Transforms
@@ -544,7 +745,7 @@ function enterMarket() {
 
     // Copy CA Logic (New UI - Delegation)
     const caDisplay = document.getElementById('final-ca-val');
-    const caValue = "BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR";
+    const caValue = "BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR"; // VERIFIED CORRECT CA
     // We must save the initial HTML immediately
     let originalCAHTML = caDisplay.innerHTML;
 
@@ -569,18 +770,22 @@ function enterMarket() {
     const galleryFrame = document.querySelector('.gallery-frame');
     const galleryPlaceholder = document.querySelector('.gallery-placeholder');
     const dots = document.querySelectorAll('.dot');
-    let isGalleryLocked = true; // Default Locked State
+    // REMOVED local isGalleryLocked, images, imgIndex to use GLOBAL from top of file
 
-    // Images Array (Updated to User Assets)
-        const images = [
-        'assets/image/gallery_hedgy_01.gif',
-        'assets/image/gallery_hedgy_02.gif',
-        'assets/image/gallery_hedgy_03.png',
-        'assets/image/gallery_hedgy_04.png',
-        'assets/image/gallery_hedgy_05.jpeg'
-    ];
-    let imgIndex = 0;
-
+    // SECURITY: Disable Right Click on Gallery
+    const protectImages = () => {
+        document.querySelectorAll('.gallery-img, .gallery-frame, #image-modal').forEach(el => {
+            el.oncontextmenu = (e) => {
+                e.preventDefault();
+                return false;
+            };
+            el.ondragstart = (e) => {
+                e.preventDefault();
+                return false;
+            };
+        });
+    };
+    protectImages(); // Init protection
     // Initialize Locked State
     if (galleryContainer) galleryContainer.classList.add('locked');
     if (galleryPlaceholder) galleryPlaceholder.style.display = 'flex';
@@ -605,23 +810,13 @@ function enterMarket() {
 
     // Toggle Lock / Open Modal
     if (galleryFrame) {
+        // Initialize Scratch Pad immediately when market loads
+        initScratchCard(); // NEW FEATURE
+
         galleryFrame.onclick = () => {
             if (isGalleryLocked) {
-                // UNLOCK ACTION
-                isGalleryLocked = false;
-                galleryContainer.classList.remove('locked');
-
-                // Animate Transition
-                if (galleryPlaceholder) {
-                    galleryPlaceholder.style.opacity = '0';
-                    setTimeout(() => galleryPlaceholder.style.display = 'none', 300);
-                }
-
-                setTimeout(() => {
-                    updateCarousel(); // Show first image
-                    playAudio('type'); // Sound feedback
-                }, 100);
-
+                // UNLOCK ACTION - NOW HANDLED BY SCRATCH PAD
+                // Do nothing on click
             } else {
                 // NORMAL MODAL ACTION
                 const modalImg = modal.querySelector('.modal-img');
@@ -689,7 +884,7 @@ function enterMarket() {
     if (buyBtn) {
         buyBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            window.open('https://raydium.io/swap/?outputCurrency=BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR', '_blank');
+            window.open('https://raydium.io/swap/?outputCurrency=BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR', '_blank'); // VERIFIED CORRECT CA
         });
     }
 }
