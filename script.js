@@ -61,18 +61,6 @@ const EXPRESSIONS = {
 // DOM Cache
 let dom = {};
 
-// === GLOBAL GALLERY STATE (Scope Fix) ===
-let isGalleryLocked = true;
-let imgIndex = 0;
-// STRICT IMAGE LIST
-const images = [
-    'assets/image/gallery_hedgy_01.gif',
-    'assets/image/gallery_hedgy_02.gif',
-    'assets/image/gallery_hedgy_03.png',
-    'assets/image/gallery_hedgy_04.png',
-    'assets/image/gallery_hedgy_05.jpeg'
-];
-
 // Web Audio Context for Synth Sounds
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -123,56 +111,27 @@ function initScratchCard() {
         resetCanvas();
     };
 
-    // REFINED TECHNICAL SCRATCH ("Digital Decrypt")
     const resetCanvas = () => {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = '#111';
+        ctx.fillStyle = '#111'; // Dark Card
         ctx.fillRect(0, 0, width, height);
 
-        // HOLOGRAPHIC GRID (Technical Feel)
-        ctx.strokeStyle = '#00F3FF';
-        ctx.lineWidth = 1;
-        ctx.globalAlpha = 0.2;
-
-        ctx.beginPath();
-        for (let x = 0; x <= width; x += 20) {
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, height);
-        }
-        for (let y = 0; y <= height; y += 20) {
-            ctx.moveTo(0, y);
-            ctx.lineTo(width, y);
-        }
-        ctx.stroke();
-        ctx.globalAlpha = 1.0;
-
-        // NO TEXT ON CANVAS - MOVED TO DOM FOR ANIMATION
+        // Add Holographic Text
+        ctx.font = '900 30px "Orbitron"';
+        ctx.fillStyle = '#00F3FF';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('$HEDGY', width / 2, height / 2);
+        ctx.font = '12px "Orbitron"';
+        ctx.fillStyle = '#555';
+        ctx.fillText('[ SCRATCH TO REVEAL ]', width / 2, height / 2 + 30);
     };
-
-    // Create DOM Overlay for Breathing Text
-    let overlayText = container.querySelector('.scratch-label');
-    if (!overlayText) {
-        overlayText = document.createElement('div');
-        overlayText.className = 'scratch-label';
-        overlayText.innerHTML = '<span class="glow-text">$HEDGY</span><br><span class="sub-text">[ SCRATCH ]</span>';
-        container.appendChild(overlayText);
-    }
-
-
-
 
     resize(); // Init
 
-    // Drawing Logic (Blocky Glitch Erase)
-
-    // Helper to fade out label
-    const hideLabel = () => {
-        if (overlayText && overlayText.style.opacity !== '0') {
-            overlayText.style.transition = 'opacity 0.3s';
-            overlayText.style.opacity = '0';
-            setTimeout(() => { if (overlayText) overlayText.style.display = 'none'; }, 300);
-        }
-    };
+    // Drawing Logic
+    let isDrawing = false;
+    let clearedPct = 0;
 
     const getPos = (e) => {
         const rect = canvas.getBoundingClientRect();
@@ -190,14 +149,9 @@ function initScratchCard() {
         const { x, y } = getPos(e);
 
         ctx.globalCompositeOperation = 'destination-out';
-
-        // Square "Pixel" Erase brushes
-        for (let i = 0; i < 3; i++) {
-            const size = 15 + Math.random() * 10;
-            const offsetX = (Math.random() - 0.5) * 20;
-            const offsetY = (Math.random() - 0.5) * 20;
-            ctx.fillRect(x + offsetX - size / 2, y + offsetY - size / 2, size, size);
-        }
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
 
         checkClearance();
     };
@@ -227,28 +181,22 @@ function initScratchCard() {
         const galleryContainer = document.querySelector('.gallery-container');
         if (galleryContainer && galleryContainer.classList.contains('locked')) {
             galleryContainer.classList.remove('locked');
-            // REMOVED AUDIO playAudio('success') per user request
-
-            // === CRITICAL FIX: Unlock Navigation ===
-            isGalleryLocked = false;
-
-            // Show first image correctly
+            playAudio('success');
+            // Show image
             const galleryImg = document.querySelector('.gallery-img');
             if (galleryImg) {
                 galleryImg.classList.add('active');
                 galleryImg.style.opacity = '1';
-                galleryImg.src = images[0]; // Reset to first valid image
-                imgIndex = 0;
+                galleryImg.src = 'assets/image/gallery_hedgy_01.gif'; // Reset to first valid image
             }
-            updateCarousel(); // Initialize dots and state
         }
     };
 
-    canvas.addEventListener('mousedown', (e) => { isDrawing = true; hideLabel(); scratch(e); });
+    canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
     canvas.addEventListener('mousemove', scratch);
     window.addEventListener('mouseup', () => isDrawing = false);
 
-    canvas.addEventListener('touchstart', (e) => { isDrawing = true; hideLabel(); scratch(e); }, { passive: false });
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, { passive: false });
     canvas.addEventListener('touchmove', scratch, { passive: false });
     window.addEventListener('touchend', () => isDrawing = false);
 }
@@ -320,6 +268,7 @@ function playAudio(name) {
 // ... existing code ...
 
 // Auto-Focus Logic
+// Auto-Focus Logic
 function triggerAutofocus() {
     const layer = document.querySelector('.autofocus-layer');
     if (!layer) return;
@@ -330,7 +279,8 @@ function triggerAutofocus() {
             const rect = document.createElement('div');
             rect.className = 'focus-rect';
 
-            const size = 50 + Math.random() * 100;
+            // User Request: 50% Size Reduction (Was 50~150 -> Now 25~75)
+            const size = (50 + Math.random() * 100) * 0.5;
             const x = (Math.random() - 0.5) * 150;
             const y = (Math.random() - 0.5) * 150;
 
@@ -351,13 +301,16 @@ function triggerAutofocus() {
         const rect = document.createElement('div');
         rect.className = 'focus-rect';
 
-        // Face Target Size
-        rect.style.width = '120px';
-        rect.style.height = '120px';
+        // Face Target Size (Sync with Hedgy Head)
+        rect.style.width = '80px';  // Reduced from 120px to match head better
+        rect.style.height = '80px'; // Reduced from 120px
 
-        // Center Screen (slightly up for face)
+        // Center Screen (Sync with Hedgy's Face Position)
+        // Hedgy is centered horizontally. 
+        // Vertically, the container is at bottom: 23%, height 300px. 
+        // Visually, the head is roughly at top: 55-60% of viewport.
         rect.style.left = '50%';
-        rect.style.top = '60%'; // Corrected Face Height
+        rect.style.top = '58%'; // Micro-adjusted for perfect face alignment
         rect.style.transform = 'translate(-50%, -50%)';
         rect.style.borderColor = '#FFD700'; // Gold Lock
 
@@ -770,7 +723,16 @@ function enterMarket() {
     const galleryFrame = document.querySelector('.gallery-frame');
     const galleryPlaceholder = document.querySelector('.gallery-placeholder');
     const dots = document.querySelectorAll('.dot');
-    // REMOVED local isGalleryLocked, images, imgIndex to use GLOBAL from top of file
+
+    // Images Array (Strictly restrict to 'assets/image/' folder)
+    const images = [
+        'assets/image/gallery_hedgy_01.gif',
+        'assets/image/gallery_hedgy_02.gif',
+        'assets/image/gallery_hedgy_03.png',
+        'assets/image/gallery_hedgy_04.png',
+        'assets/image/gallery_hedgy_05.jpeg'
+    ];
+    let imgIndex = 0;
 
     // SECURITY: Disable Right Click on Gallery
     const protectImages = () => {
@@ -814,7 +776,7 @@ function enterMarket() {
         initScratchCard(); // NEW FEATURE
 
         galleryFrame.onclick = () => {
-            if (isGalleryLocked) {
+            if (galleryContainer.classList.contains('locked')) {
                 // UNLOCK ACTION - NOW HANDLED BY SCRATCH PAD
                 // Do nothing on click
             } else {
@@ -828,7 +790,7 @@ function enterMarket() {
     // --- MODAL LOGIC END ---
 
     function updateCarousel() {
-        if (isGalleryLocked) return; // Do nothing if locked check fails (safety)
+        if (galleryContainer.classList.contains('locked')) return; // Check DOM class, not variable
 
         if (galleryImg) {
             galleryImg.classList.add('active'); // Ensure vis
@@ -852,7 +814,7 @@ function enterMarket() {
     const leftArrow = document.querySelector('.nav-arrow.left');
     if (leftArrow) {
         leftArrow.addEventListener('click', () => {
-            if (isGalleryLocked) return;
+            if (galleryContainer.classList.contains('locked')) return;
             imgIndex = (imgIndex - 1 + images.length) % images.length;
             updateCarousel();
         });
@@ -861,14 +823,11 @@ function enterMarket() {
     const rightArrow = document.querySelector('.nav-arrow.right');
     if (rightArrow) {
         rightArrow.addEventListener('click', () => {
-            if (isGalleryLocked) return;
+            if (galleryContainer.classList.contains('locked')) return;
             imgIndex = (imgIndex + 1) % images.length;
             updateCarousel();
         });
     }
-
-    // Don't auto-update carousel on init, wait for unlock
-    // updateCarousel(); // REMOVED
 
     // 5. INJECT HTML FOR '17' HIGHLIGHT (Total Supply)
     // Find the total supply element by content or class structure
@@ -880,12 +839,16 @@ function enterMarket() {
     });
 
     // Buy Button Logic (New UI)
+    // Buy Button Logic (Mobile Optimized)
     const buyBtn = document.getElementById('btn-buy-final');
     if (buyBtn) {
-        buyBtn.addEventListener('click', (e) => {
+        buyBtn.onclick = (e) => {
             e.preventDefault();
-            window.open('https://raydium.io/swap/?outputCurrency=BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR', '_blank'); // VERIFIED CORRECT CA
-        });
+            e.stopPropagation(); // Stop bubbling
+            const targetUrl = 'https://raydium.io/swap/?outputCurrency=BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR';
+            console.log("Redirecting to Raydium:", targetUrl);
+            window.open(targetUrl, '_blank');
+        };
     }
 }
 
