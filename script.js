@@ -838,18 +838,7 @@ function enterMarket() {
         }
     });
 
-    // Buy Button Logic (New UI)
-    // Buy Button Logic (Mobile Optimized)
-    const buyBtn = document.getElementById('btn-buy-final');
-    if (buyBtn) {
-        buyBtn.onclick = (e) => {
-            e.preventDefault();
-            e.stopPropagation(); // Stop bubbling
-            const targetUrl = 'https://raydium.io/swap/?outputCurrency=BdQh5Gagj6BQH8HeTqi83g152Yk8Z9NRHqf51HKi4TxR';
-            console.log("Redirecting to Raydium:", targetUrl);
-            window.open(targetUrl, '_blank');
-        };
-    }
+
 }
 
 // Flag for skipping boot
